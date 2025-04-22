@@ -8,6 +8,10 @@ Research Questions:
 
 3. Which players are over/underperforming their xG/xA values the most?
 
+4. Does having a higher possession translate to wins?
+
+5. Which teams have the best or worst shot conversion rate?
+
 OVERALL PROJECT PLAN
 
 Goal: Create an end-to-end data analysis project about soccer using scraped data. 
