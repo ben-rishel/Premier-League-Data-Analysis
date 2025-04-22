@@ -1,0 +1,32 @@
+Topic: 2025 Premier League Data Analysis
+
+Research Questions:
+
+1. Is home-field advantage real overall? For certain teams?
+
+2. What are the differences across the big 5 leagues? Difference in goals, fouls, etc.
+
+3. Which players are over/underperforming their xG/xA values the most?
+
+OVERALL PROJECT PLAN
+
+Goal: Create an end-to-end data analysis project about soccer using scraped data. 
+
+Needs: 
+1. Data
+2. Packages necessary for data scraping
+3. Cleaned data
+4. Packages necessary to clean data
+5. Data visualizations
+6. Packages for data visualization
+7. Properly formatted QMD file
+
+Steps:
+1. Locating data source and analyzing FAIR/CARE principles
+2. Scraping data
+3. Tidying data, wrangling data, cleaning data
+4. Exploratory data analysis
+5. Investigating research questions
+6. Creating data visualizations
+7. Conduct any relevant statistical analysis (t-tests)
+8. Tell the story of our findings through a reproducible report in a QMD file
