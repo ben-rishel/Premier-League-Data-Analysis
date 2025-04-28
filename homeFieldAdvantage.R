@@ -19,6 +19,7 @@
 library(worldfootballR)
 library(dplyr)
 library(tidyr)
+library(ggplot2)
 
 pl_team_stats_raw <- fb_season_team_stats(
   country = "ENG", 
@@ -49,6 +50,55 @@ pl_more_pts_home <- pl_pts_per_match %>%
     Squad = Squad,
     Pts_gained_at_home_per_match = Pts_per_MP_Home - Pts_per_MP_Away,
     xPts_gained_at_home_per_match = xGD_per_90_Home - xGD_per_90_Away
-  )
+  ) 
 
-View(pl_more_pts_home)
+#Creating Density Chart to Analyze How Much Home Field Advantage Matters
+ggplot( 
+  data = pl_more_pts_home,
+  aes(
+    x = Pts_gained_at_home_per_match
+    )
+  ) +
+  geom_density(
+    fill = "#69b3a2", 
+    color = "#e9ecef"
+  ) + 
+  labs(
+    x = "Points Gained Per Match at Home",
+    y = "Density",
+    title = "Premier League Points Gained at Home"
+  ) +
+  scale_x_continuous(
+    limits = c(-.75, 1.1)
+    ) + 
+  theme_light()
+
+
+
+#Top/Bottom Density Plot that Compares Points vs. Expected Points
+ggplot(
+  data = pl_more_pts_home,
+  aes(x = Pts_gained_at_home_per_match)
+) +
+  # Top
+  geom_density(
+    aes(y = ..density..),
+    fill = "#69b3a2"
+  ) +
+  geom_label(
+    aes(x = .8, y = 1, label = "Points Gained at Home Per Match")
+  ) +
+  # Bottom (flipped)
+  geom_density(
+    aes(x = xPts_gained_at_home_per_match, y = -..density..),
+    fill = "#404080"
+  ) +
+  geom_label(
+    aes(x = .8, y = -1, label = "xPoints Gained at Home per Match")
+  ) + 
+  labs(
+    x = "Points/xPoints Gained Per Match at Home",
+    y = "Density",
+    title = "Premier League Points/Expected Points Gained at Home"
+  ) +
+  theme_light()
