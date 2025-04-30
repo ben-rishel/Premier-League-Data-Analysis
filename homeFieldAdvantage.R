@@ -109,7 +109,12 @@ ggplot(
 
 ### Testing League-Wide Home Field Advantage Statistical Significance
 
-pl_2025_match_raw <- fb_match_results(country = "ENG", gender = "M", season_end_year = 2025, tier = "1st")
+pl_2025_match_raw <- fb_match_results(
+  country = "ENG", 
+  gender = "M", 
+  season_end_year = 2025, 
+  tier = "1st"
+  )
 
 ## Selecting attributes for analysis, and making them numeric values
 pl_2025_match <- pl_2025_match_raw %>%
@@ -117,14 +122,15 @@ pl_2025_match <- pl_2025_match_raw %>%
     HomeGoals,     
     AwayGoals
   ) %>%
-  mutate( #Force stats to be numeric
+  mutate( #force stats to be numeric
     across(c(HomeGoals, AwayGoals), as.numeric)
-  )
+  ) %>%
+  drop_na(HomeGoals, AwayGoals) #dropping nullified matches
 
 ## Creating Summary Table with Match as Case, attributes homePts, awayPts
 pl_homeAwayPts <- pl_2025_match %>%
   mutate(
-    homePts = case_when( ## When home scores more - win, if same - tie
+    homePts = case_when( #when home scores more - win, if same - tie
       HomeGoals  > AwayGoals ~ 3,
       HomeGoals  == AwayGoals ~ 1,
       HomeGoals  < AwayGoals ~ 0
@@ -138,18 +144,19 @@ pl_homeAwayPts <- pl_2025_match %>%
 
 ## Creating table to be used for t-test
 pl_homePtsGained <- pl_homeAwayPts %>%
-  summarize(
+  mutate(
     homePtsGained = homePts - awayPts
   ) 
 
 ## Running t-test
 test <- t.test( 
         pl_homePtsGained$homePtsGained,
-        mu = 0,          # Null Hypothesis: no home advantage
+        mu = 0,          #Null Hypothesis: no home advantage
         alternative = "greater" ) # One sided t-test
 
 ## Building Dataframe with info from t-test
 test_info <- data.frame(
+  `Average Points Gained` = mean(pl_homePtsGained$homePtsGained),
   `T-Statistic` = unname(test$statistic),
   `P-Value`     = test$p.value,
   `CI-lower`    = test$conf.int[1],
@@ -160,12 +167,76 @@ test_info <- data.frame(
 ## Create Nice Table with Kable - "One-Sample T-Test: Home vs. Away Point Difference"
 test_info %>% kable(
       digits  = 3,
-      align = c(rep("c", 4))
+      align = c(rep("c", 5))
       ) %>%
   kableExtra::kable_styling(
     bootstrap_options = c("striped", "condensed"),
     font_size = 16
   )
+
+
+### Testing League-Wide Home Field Advantage Statistical Significance 2022-2025
+
+pl_2020_2025_match_raw <- fb_match_results(country = "ENG", gender = "M", season_end_year = c(2022,2023,2024,2025), tier = "1st")
+
+## Selecting attributes for analysis, and making them numeric values
+pl_2020_2025_match <- pl_2020_2025_match_raw %>%
+  select(
+    HomeGoals,     
+    AwayGoals
+  ) %>%
+  mutate( #Force stats to be numeric
+    across(c(HomeGoals, AwayGoals), as.numeric)
+  ) %>%
+  drop_na(HomeGoals, AwayGoals) #dropping nullified matches
+
+## Creating Summary Table with Match as Case, attributes homePts, awayPts
+pl_homeAwayPts <- pl_2020_2025_match %>%
+  mutate(
+    homePts = case_when( #When home scores more - win, if same - tie
+      HomeGoals  > AwayGoals ~ 3,
+      HomeGoals  == AwayGoals ~ 1,
+      HomeGoals  < AwayGoals ~ 0
+    ),
+    awayPts = case_when(
+      AwayGoals  > HomeGoals ~ 3,
+      AwayGoals  == HomeGoals ~ 1,
+      AwayGoals < HomeGoals ~ 0
+    )
+  )
+
+## Creating table to be used for t-test
+pl_homePtsGained <- pl_homeAwayPts %>%
+  mutate(
+    homePtsGained = homePts - awayPts
+  ) 
+
+## Running t-test
+test <- t.test( 
+  pl_homePtsGained$homePtsGained,
+  mu = 0,          #Null Hypothesis: no home advantage
+  alternative = "greater" ) # One sided t-test
+
+## Building Dataframe with info from t-test
+test_info <- data.frame(
+  `Average Points Gained` = mean(pl_homePtsGained$homePtsGained),
+  `T-Statistic` = unname(test$statistic),
+  `P-Value`     = test$p.value,
+  `CI-lower`    = test$conf.int[1],
+  `CI-upper`    = test$conf.int[2],
+  check.names   = FALSE  # keep our nice column names
+)
+
+## Create Nice Table with Kable - "One-Sample T-Test: Home vs. Away Point Difference"
+test_info %>% kable(
+  digits  = 3,
+  align = c(rep("c", 5))
+) %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "condensed"),
+    font_size = 16
+  )
+
 
 
 
