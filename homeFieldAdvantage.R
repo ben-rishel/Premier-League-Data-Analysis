@@ -12,7 +12,6 @@
 # Wrangle data to just contain home/away stats
 # Visualize the difference in home/away stats for all teams
 # Run a t-test to see if the difference is statistically significant
-# Repeat for other leagues
 
 ### Import Packages
 library(worldfootballR)
@@ -54,7 +53,9 @@ pl_more_pts_home <- pl_pts_per_match %>%
     xPts_gained_at_home_per_match = xGD_per_90_Home - xGD_per_90_Away
   ) 
 
-#Creating Density Chart to Analyze How Much Home Field Advantage Matters
+### Data Visualizations
+
+## Creating Density Chart to Analyze How Much Home Field Advantage Matters
 ggplot( 
   data = pl_more_pts_home,
   aes(
@@ -77,7 +78,7 @@ ggplot(
 
 
 
-#Top/Bottom Density Plot that Compares Points vs. Expected Points
+## Top/Bottom Density Plot that Compares Points vs. Expected Points
 ggplot(
   data = pl_more_pts_home,
   aes(x = Pts_gained_at_home_per_match)
@@ -106,7 +107,7 @@ ggplot(
   theme_light()
 
 
-#Testing League-Wide Home Field Advantage Statistical Significance
+### Testing League-Wide Home Field Advantage Statistical Significance
 
 pl_2025_match_raw <- fb_match_results(country = "ENG", gender = "M", season_end_year = 2025, tier = "1st")
 
@@ -123,7 +124,7 @@ pl_2025_match <- pl_2025_match_raw %>%
 ## Creating Summary Table with Match as Case, attributes homePts, awayPts
 pl_homeAwayPts <- pl_2025_match %>%
   mutate(
-    homePts = case_when( ## When home scores more, win, if same, tie
+    homePts = case_when( ## When home scores more - win, if same - tie
       HomeGoals  > AwayGoals ~ 3,
       HomeGoals  == AwayGoals ~ 1,
       HomeGoals  < AwayGoals ~ 0
@@ -141,10 +142,11 @@ pl_homePtsGained <- pl_homeAwayPts %>%
     homePtsGained = homePts - awayPts
   ) 
 
+## Running t-test
 test <- t.test( 
         pl_homePtsGained$homePtsGained,
         mu = 0,          # Null Hypothesis: no home advantage
-        alternative = "greater" ) #One sided t-test
+        alternative = "greater" ) # One sided t-test
 
 ## Building Dataframe with info from t-test
 test_info <- data.frame(
