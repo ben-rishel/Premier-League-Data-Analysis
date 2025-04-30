@@ -141,23 +141,29 @@ pl_homePtsGained <- pl_homeAwayPts %>%
     homePtsGained = homePts - awayPts
   ) 
 
-test < - t.test( 
+test <- t.test( 
         pl_homePtsGained$homePtsGained,
         mu = 0,          # Null Hypothesis: no home advantage
         alternative = "greater" ) #One sided t-test
 
 ## Building Dataframe with info from t-test
 test_info <- data.frame(
-  `t statistic` = unname(test$statistic),
-  df            = unname(test$parameter),
-  `p value`     = test$p.value,
-  `CI lower`    = test$conf.int[1],
-  `CI upper`    = test$conf.int[2],
+  `T-Statistic` = unname(test$statistic),
+  `P-Value`     = test$p.value,
+  `CI-lower`    = test$conf.int[1],
+  `CI-upper`    = test$conf.int[2],
   check.names   = FALSE  # keep our nice column names
 )
 
-## Create Nice Table with Kable
+## Create Nice Table with Kable - "One-Sample T-Test: Home vs. Away Point Difference"
 test_info %>% kable(
       digits  = 3,
-      caption = "One-Sample T-Test: Home vs. Away Point Difference"
-      )
+      align = c(rep("c", 4))
+      ) %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "condensed"),
+    font_size = 16
+  )
+
+
+
