@@ -4,13 +4,11 @@ Research Questions:
 
 1. Is home-field advantage real overall? For certain teams?
 
-2. What are the differences across the big 5 leagues? Difference in goals, fouls, etc.
+2. What are the financial differences across the big 5 leagues? 
 
-3. Which players are over/underperforming their xG/xA values the most?
+3. Does having a higher possession translate to wins?
 
-4. Does having a higher possession translate to wins?
-
-5. Which teams have the best or worst shot conversion rate?
+4. Which teams have the best or worst shot conversion rate?
 
 OVERALL PROJECT PLAN
 
