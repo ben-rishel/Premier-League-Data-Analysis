@@ -42,9 +42,9 @@ We present the guidelines as a checklist in this file. This means that your team
 - [x] Come up with a topic and set of research questions your team will explore.
 - [x] Make a plan for your work. We suggested putting together your work plan ASAP.
 - [x] Locate appropriate data sources for your project.
-  - [] Your main data source may __not__ be one that we used in class. If you are interested in using data found in an R package, please consult with your instructor first.
+  - [x] Your main data source may __not__ be one that we used in class. If you are interested in using data found in an R package, please consult with your instructor first.
   - [x] Supplementary data sources may come from anywhere.
-- [ ] Read in your data and perform any necessary data tidying, wrangling, and cleaning.
+- [x] Read in your data and perform any necessary data tidying, wrangling, and cleaning.
 - [ ] Conduct Exploratory Data Analysis.
 - [ ] Prepare a reproducible report.
   - [ ] Use a QMD file; the output type is PDF.
@@ -81,7 +81,7 @@ We present the guidelines as a checklist in this file. This means that your team
 - [ ] All code should be written according to a Style Guide of your choice. List this Style Guide as a code comment in your first code chunk.
   - __Possible Style Guides:__ There are several different coding Style Guides you can follow; here are a few. [The BOAST Style Guide](https://educationshinyappteam.github.io/Style_Guide/coding.html), [The Tidyverse Style Guide](https://style.tidyverse.org/), [Google's R Style Guide](https://google.github.io/styleguide/Rguide.html)
 - [x] Sign up for your Work-in-Progress Presentation
-- [ ] Complete your Work-in-Progress Presentation (details below)
+- [x] Complete your Work-in-Progress Presentation (details below)
 - [ ] Finalize your work and submit your report as a __PDF__ to the appropriate submission portal in Canvas by the deadline.
   - [ ] As a comment on your submission, include a link to your team's project repo.
 - [ ] Each team member must complete their Peer & Self Evaluations for working together on this project. This will be an assignment in MyOpenMath and needs to be completed by the deadline.
