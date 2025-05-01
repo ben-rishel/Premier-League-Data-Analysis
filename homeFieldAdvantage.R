@@ -1,10 +1,12 @@
-#### Research Question 1. Is home-field advantage real overall? For certain teams?
+#### Research Question 1. Is home-field advantage real?
 
 ### Plan: Goal, Needs, Steps
 
 ## Goal: Research whether or not home-field advantage is real in world football
 
-## Needs: Data from worldfootballR that contains home-away splits
+## Needs: 
+# Nouns: Data, worldfootballR package, dplyr, tidyr, ggplot2, knitr
+# Verbs: worldfootballR functions, data wrangling verbs, ggplot functions
 
 ## Steps
 # Import Packages
