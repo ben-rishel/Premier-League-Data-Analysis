@@ -3,7 +3,7 @@
 # "percentage translate to wins?"
 
 # NEEDS: Verbs --> filter, select, inner_join, mutate
-# NEEDS: Nouns --> worldFootballR package, all necessary libraries
+# NEEDS: Nouns --> worldFootballR package, all necessary libraries, team stats
 
 # STEPS:
 # 1. Install the packages and call them
@@ -62,22 +62,20 @@ pl_table_clean <- pl_table %>%
 pl_poss_wins <- pl_possession_clean %>%
   inner_join(pl_table_clean, by = "Squad")
 
-View(pl_poss_wins)
 
 # Creates scatter plot for the combined data
 ggplot(
   data = pl_poss_wins,
   mapping = aes(
     x = Poss,
-    y = W,
-    color = Squad
+    y = W
   )
 ) +
   geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed") +
   labs(
     x = "Possession Percentage",
     y = "Wins",
-    color = "Squad",
     title = "Wins by Possession Percentage"
   ) +
   theme_bw() +
