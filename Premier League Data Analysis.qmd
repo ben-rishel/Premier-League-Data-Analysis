@@ -1,0 +1,24 @@
+---
+title: "Premier League Data Analysis (2024-25)"
+author: "Alven Huang and Ben Rishel"
+format: pdf
+execute:
+  echo: false
+  warning: false
+---
+
+# Introduction
+
+The Premier League is a professional soccer league in England and is the highest level in the English system. The English system runs on a promotion and relegation style. Each season 20 teams fight to stay out of the relegation zone and compete for the Premier League title. Soccer, like any other sport, can be benefited from data analytics. In this sport, data can be used to find the most optimal strategies, whether it is playing the possession game or playing fast. Some standout analytics from this sport consists of win percentage, shot conversion rate, etc. In this project we answered four important research questions.
+
+
+# Data Provenance
+
+## Primary Dataset
+
+## Secondary Dataset
+
+
+# FAIR Principles
+
+# CARE Principles
