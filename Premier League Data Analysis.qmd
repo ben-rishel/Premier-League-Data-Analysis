@@ -1,31 +1,77 @@
 ---
 title: "Premier League Data Analysis (2024-25)"
 author: "Alven Huang and Ben Rishel"
+date: "May 7th, 2025"
+date-modified: now
 format: pdf
 execute:
   echo: false
   warning: false
+  error: false
 ---
 
 # Introduction
 
-The Premier League is a professional soccer league in England and is the highest level in the English system. The English system runs on a promotion and relegation style. Each season 20 teams fight to stay out of the relegation zone and compete for the Premier League title. Soccer, like any other sport, can be benefited from data analytics. In this sport, data can be used to find the most optimal strategies, whether it is playing the possession game or playing fast. Some standout analytics from this sport consists of win percentage, shot conversion rate, etc. In this project we answered four important research questions.
+The Premier League is a professional soccer league in England and is the highest level in the English system. The English system runs on a promotion and relegation style. Each season 20 teams fight to stay out of the relegation zone and compete for the Premier League title. Soccer, like any other sport, can benefit from data analytics. In this sport, data can be used to find the most optimal strategies, whether it is playing the possession game or playing fast. While there are some cutting edge statistics in soccer like expected goals and expected points (more details to come), some of the timeless statistics like possession and win rates are useful as well. In this project we answered four important research questions regarding the 2025 Premier League Season (35/38 matchdays completed at the creation of the analysis).
 
 ## Research Questions
+
+1. Does Having a Higher Possession Percentage Translate to Wins?
+
+2. Is Home-Field Advantage Real?
+
+3. Which Teams Have the Best and Worst Shot Conversion Rates?
+
+4. How is the Premier League Different from the Other "Big 5" Leagues Financially?
 
 # Data Provenance
 
 ## Primary Dataset
 
+Source: The primary dataset comes from fbref.com or Football Reference. However, Football Reference primarily gets their data from Opta.
+
+Who Collected the Data: Opta uses a combination of human analysts and AI systems to track and collect data across world soccer.
+
+Why Did They Collect the Data: Opta collects the data because they are paid to do so by teams and broadcast companies who use the data for decision making and broadcasts, respectively. Football reference then displays this data through their partnership with Opta in order to generate website traffic and ad revenue.
+
+Cases: Depending on the table in Football Reference, a case could be a player, a team, a specific match, a specific competition, or even an award. Needless to say, Football Reference contains an extraordinary amount of data. We specifically used data in which teams or specific matches were cases.
+
 ## Secondary Dataset
 
+Source: The secondary dataset comes from transfermarkt.com or Transfermarkt.
+
+Who Collected the Data: Transfermarkt relies on user contributed data that is reviewed and moderated. In addition, they have employees who update data based upon publicly available sources like official club/league/federation websites and social media.
+
+Why Did They Collect the Data: Transfermarkt collects all of this data to build a popular database for fans in order to gain website traffic for ad revenue and subscriptions.
+
+Cases: Just like Football Reference, Transfermarkt contains many tables with different cases. For the purpose of this analysis, we only used data in which a specific player is a case.
+
+## Note on How We Used Data
+
+For both the Football Reference and Transfermarkt data, we used the worldfootballR package to scrape the data. To install the most updated version of worldfootballR package, refer to the beginning of the code appendix.
+
+```{r}
+#### Chunk1 - How to Install Updated worldfootballR
+
+#devtools::install_github("JaseZiv/worldfootballR")
+#installs most updated version of worldfootballR package
+#This package allows easy scraping of FBref and Transfermarkt
+#https://jaseziv.github.io/worldfootballR/articles/extract-fbref-data.html
+```
 
 # FAIR Principles
+
+Findable - Data is easily findable on fbref.com and transfermarkt.com
+
+Accessible - The data is accessible as it is not behind a paywall and available through scraping. Easy CSV downloads are available on fbref.com
+
+Interoperable - The data follows broadly applicable language for soccer data. Data is consistently formatted.
+
+Reusable - The data includes many relevant, accurate attributes. In addition, they have terms of use listed.
 
 # CARE Principles
 
 Our data does not include any offensive, sensitive, or community-specific information and data. We practiced ethical guidelines and standards throughout the entire project. The data we collected is available for public use. When working on our analysis we were fair and focused on the collective benefit principle. We made sure we remained unbiased and did not access any private information while collecting the data.
-
 
 # Does Having a Higher Possession Percentage Translate to Wins?
 
@@ -34,29 +80,11 @@ For this research question, we want to visualize the average possession percenta
 We did this by first installing and calling the required packages. Then we took the scraped data and focus on the possession stat type. We then created a new function to obtain all the teams and their wins this season. We cleaned the data to focus on only wins, possession, and squads. Then, we combined the data and plotted it. On the plot, every team is a black dot. We figured that since this analysis is more focused on the location of the points, we do not need to identify each team with a specific color. We added a trend line to see who is above and below, which will also help us answer our question. We used a scatter plot to see each team's win total by their average possession percentage.
 
 ```{r}
-#devtools::install_github("JaseZiv/worldfootballR")
-#installs most updated version of worldfootballR package
-#This package allows easy scraping of FBref and Transfermarkt
-#https://jaseziv.github.io/worldfootballR/articles/extract-fbref-data.html
-library(worldfootballR)
-library(dplyr)
-
-
-#Function to extract a season of team stats from a particular league (PL here)
-#stat_types are league_table, league_table_home_away, standard
-#keeper, keeper_adv, shooting, passing, passing_types, goal_shot_creation
-#defense, possession, playing_time, misc
-pl_team_stats_raw <- fb_season_team_stats(
-  country = "ENG", 
-  gender = "M", 
-  season_end_year = 2025, 
-  tier = "1st", 
-  stat_type = "standard"
-  )
+#### Chunk2 - Does Having a Higher Possession Percentage Translate to Wins?
 
 # GOAL: Use scraped data and clean data to create a data visualization that 
-# displays and answers our research questions, "Does having a higher average possession
-# "percentage translate to wins?"
+# displays and answers our research questions, "Does having a higher average 
+# possessionpercentage translate to wins?"
 
 # NEEDS: Verbs --> filter, select, inner_join, mutate
 # NEEDS: Nouns --> worldFootballR package, all necessary libraries, team stats
@@ -78,6 +106,8 @@ pl_team_stats_raw <- fb_season_team_stats(
 
 
 # Calls all needed libraries
+library(worldfootballR)
+library(dplyr)
 library(tidyr)
 library(tidyverse)
 library(ggplot2)
@@ -141,33 +171,260 @@ ggplot(
 
 As we can see in the figure above, many points reside above the trend line. We can also see that almost every team with an estimated average possession percentage of 57 are close to 17 wins and above, which is also above the trend line. The teams with a lower percentage can be seen towards the bottom of plot where the wins are around 14 and less. However, there is one outlier that has an percentage of just over 40, and they have more about 17 wins. Other than the outlier, we can see that teams with a higher average possession rate tend to win more games. This is what we expected the result to be.
 
-# Shot Conversion Rate
+# Is Home-Field Advantage Real?
+
+```{r}
+#### Chunk3 - Is Home-Field Advantage Real?
+
+### Plan: Goal, Needs, Steps
+
+## Goal: Research whether or not home-field advantage is real in world football
+
+## Needs: 
+# Nouns: Data, worldfootballR package, dplyr, tidyr, ggplot2, knitr
+# Verbs: worldfootballR functions, data wrangling verbs, ggplot functions
+
+## Steps
+# Import Packages
+# Load in Data
+# Wrangle data to just contain home/away stats
+# Visualize the difference in home/away stats for all teams
+# Run a t-test to see if the difference is statistically significant
+
+### Import Packages
+library(worldfootballR)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(knitr)
+
+
+### Load in Data
+pl_team_stats_raw <- fb_season_team_stats(
+  country = "ENG", 
+  gender = "M", 
+  season_end_year = 2025, 
+  tier = "1st", 
+  stat_type = "league_table_home_away"
+)
+
+### Data Wrangling
+
+## Selecting attributes for analysis, and making them numeric values
+pl_pts_per_match <- pl_team_stats_raw %>%
+  select(
+    Squad,     
+    Pts_per_MP_Home,
+    Pts_per_MP_Away,
+    xGD_per_90_Home,
+    xGD_per_90_Away
+  ) %>%
+  mutate( #Force stats to be numeric
+    across(c(Pts_per_MP_Home, Pts_per_MP_Away, xGD_per_90_Home, xGD_per_90_Away), as.numeric)
+  )
+
+## Creating Summary Table with Points Gained Metrics
+pl_more_pts_home <- pl_pts_per_match %>%
+  summarize(
+    Squad = Squad,
+    Pts_gained_at_home_per_match = Pts_per_MP_Home - Pts_per_MP_Away,
+    xPts_gained_at_home_per_match = xGD_per_90_Home - xGD_per_90_Away
+  ) 
+
+### Data Visualizations
+
+## Creating Density Chart to Analyze How Much Home Field Advantage Matters
+ggplot( 
+  data = pl_more_pts_home,
+  aes(
+    x = Pts_gained_at_home_per_match
+    )
+  ) +
+  geom_density( #density plot
+    fill = "#69b3a2", 
+    color = "#e9ecef"
+  ) + 
+  labs(
+    x = "Points Gained Per Match at Home",
+    y = "Density",
+    title = "Premier League Points Gained at Home"
+  ) +
+  scale_x_continuous(
+    limits = c(-.75, 1.1) #Making sure all data fits by setting x bounds
+    ) + 
+  theme_light()
+
+
+
+## Top/Bottom Density Plot that Compares Points vs. Expected Points
+ggplot(
+  data = pl_more_pts_home,
+  aes(x = Pts_gained_at_home_per_match)
+) +
+  # Top
+  geom_density(
+    aes(y = ..density..),
+    fill = "#69b3a2"
+  ) + 
+  geom_label( #adds label to top chart
+    aes(x = .8, y = 1, label = "Points Gained at Home Per Match")
+  ) +
+  # Bottom (flipped)
+  geom_density(
+    aes(x = xPts_gained_at_home_per_match, y = -..density..),
+    fill = "#404080"
+  ) +
+  geom_label( #adds label to bottom chart
+    aes(x = .8, y = -1, label = "xPoints Gained at Home per Match")
+  ) + 
+  labs(
+    x = "Points/xPoints Gained Per Match at Home",
+    y = "Density",
+    title = "Premier League Points/Expected Points Gained at Home"
+  ) +
+  theme_light()
+
+
+### Testing League-Wide Home Field Advantage Statistical Significance
+
+pl_2025_match_raw <- fb_match_results(
+  country = "ENG", 
+  gender = "M", 
+  season_end_year = 2025, 
+  tier = "1st"
+  )
+
+## Selecting attributes for analysis, and making them numeric values
+pl_2025_match <- pl_2025_match_raw %>%
+  select(
+    HomeGoals,     
+    AwayGoals
+  ) %>%
+  mutate( #force stats to be numeric
+    across(c(HomeGoals, AwayGoals), as.numeric)
+  ) %>%
+  drop_na(HomeGoals, AwayGoals) #dropping nullified matches
+
+## Creating Summary Table with Match as Case, attributes homePts, awayPts
+pl_homeAwayPts <- pl_2025_match %>%
+  mutate(
+    homePts = case_when( #when home scores more - win, if same - tie
+      HomeGoals  > AwayGoals ~ 3,
+      HomeGoals  == AwayGoals ~ 1,
+      HomeGoals  < AwayGoals ~ 0
+    ),
+    awayPts = case_when(
+      AwayGoals  > HomeGoals ~ 3,
+      AwayGoals  == HomeGoals ~ 1,
+      AwayGoals < HomeGoals ~ 0
+    )
+  )
+
+## Creating table to be used for t-test
+pl_homePtsGained <- pl_homeAwayPts %>%
+  mutate(
+    homePtsGained = homePts - awayPts
+  ) 
+
+## Running t-test
+test <- t.test( 
+        pl_homePtsGained$homePtsGained,
+        mu = 0,          #Null Hypothesis: no home advantage
+        alternative = "greater" ) # One sided t-test
+
+## Building Dataframe with info from t-test
+test_info <- data.frame(
+  `Average Points Gained` = mean(pl_homePtsGained$homePtsGained),
+  `T-Statistic` = unname(test$statistic),
+  `P-Value`     = test$p.value,
+  `CI-lower`    = test$conf.int[1],
+  `CI-upper`    = test$conf.int[2],
+  check.names   = FALSE  # keep our nice column names
+)
+
+## Create Nice Table with Kable - "One-Sample T-Test: Home vs. Away Point Difference"
+test_info %>% kable(
+      digits  = 3,
+      align = c(rep("c", 5))
+      ) %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "condensed"),
+    font_size = 16
+  )
+
+
+### Testing League-Wide Home Field Advantage Statistical Significance 2022-2025
+
+pl_2020_2025_match_raw <- fb_match_results(country = "ENG", gender = "M", season_end_year = c(2022,2023,2024,2025), tier = "1st")
+
+## Selecting attributes for analysis, and making them numeric values
+pl_2020_2025_match <- pl_2020_2025_match_raw %>%
+  select(
+    HomeGoals,     
+    AwayGoals
+  ) %>%
+  mutate( #Force stats to be numeric
+    across(c(HomeGoals, AwayGoals), as.numeric)
+  ) %>%
+  drop_na(HomeGoals, AwayGoals) #dropping nullified matches
+
+## Creating Summary Table with Match as Case, attributes homePts, awayPts
+pl_homeAwayPts <- pl_2020_2025_match %>%
+  mutate(
+    homePts = case_when( #When home scores more - win, if same - tie
+      HomeGoals  > AwayGoals ~ 3,
+      HomeGoals  == AwayGoals ~ 1,
+      HomeGoals  < AwayGoals ~ 0
+    ),
+    awayPts = case_when(
+      AwayGoals  > HomeGoals ~ 3,
+      AwayGoals  == HomeGoals ~ 1,
+      AwayGoals < HomeGoals ~ 0
+    )
+  )
+
+## Creating table to be used for t-test
+pl_homePtsGained <- pl_homeAwayPts %>%
+  mutate(
+    homePtsGained = homePts - awayPts
+  ) 
+
+## Running t-test
+test <- t.test( 
+  pl_homePtsGained$homePtsGained,
+  mu = 0,          #Null Hypothesis: no home advantage
+  alternative = "greater" ) # One sided t-test
+
+## Building Dataframe with info from t-test
+test_info <- data.frame(
+  `Average Points Gained` = mean(pl_homePtsGained$homePtsGained),
+  `T-Statistic` = unname(test$statistic),
+  `P-Value`     = test$p.value,
+  `CI-lower`    = test$conf.int[1],
+  `CI-upper`    = test$conf.int[2],
+  check.names   = FALSE  # keep our nice column names
+)
+
+## Create Nice Table with Kable - "One-Sample T-Test: Home vs. Away Point Difference"
+test_info %>% kable(
+  digits  = 3,
+  align = c(rep("c", 5))
+) %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "condensed"),
+    font_size = 16
+  )
+
+```
+
+# Which Teams Have the Best and Worst Shot Conversion Rates?
 
 In this analysis, we took a look at which teams have the best shot conversion rate and which teams have the worst. We believe this is a great analytic to look at to see which teams are attack heavy and which teams are most consistent on the attack.
 
 To do this, we used our scraped data and called it where we focused on the shooting statistics. We then cleaned the data and added the shot conversion rate formula to the function. The formula is easy. It is the amount of goals scored divided by the amount of shots taken. Then, you divide that number by 100 to find the percentage. Then we plotted this data using a horizontal bar chart, where the teams are on the left and the percent is on the bottom. We can easily observe the data and answer our question.
 
 ```{r}
-
-#devtools::install_github("JaseZiv/worldfootballR")
-#installs most updated version of worldfootballR package
-#This package allows easy scraping of FBref and Transfermarkt
-#https://jaseziv.github.io/worldfootballR/articles/extract-fbref-data.html
-library(worldfootballR)
-library(dplyr)
-
-
-#Function to extract a season of team stats from a particular league (PL here)
-#stat_types are league_table, league_table_home_away, standard
-#keeper, keeper_adv, shooting, passing, passing_types, goal_shot_creation
-#defense, possession, playing_time, misc
-pl_team_stats_raw <- fb_season_team_stats(
-  country = "ENG", 
-  gender = "M", 
-  season_end_year = 2025, 
-  tier = "1st", 
-  stat_type = "standard"
-  )
+#### Chunk4 - Which Teams Have the Best and Worst Shot Conversion Rates?
 
 # GOAL: Use scraped and clean data to find each Premier League teams'
 # shot conversion rate in the 2024-25 season. This will help answer our 
@@ -190,6 +447,8 @@ pl_team_stats_raw <- fb_season_team_stats(
 
 # Calls all needed libraries
 library(ggplot2)
+library(worldfootballR)
+library(dplyr)
 
 
 # Focuses on shooting for all the teams in English Mens' First Tier
@@ -231,7 +490,142 @@ ggplot(
 
 From this bar chart, we can discover that Brentford has the highest shot conversion rate with 15 percent. We can also observe that Southampton has the worst shot conversion rate with a rate about 6.5 percent. This data does not necessarily tell us which teams are the worst and best teams but rather which teams tend me to the most consistent when having an opportunity to score. As we are soccer fans ourselves, we recognize each team's skill level and we can confidently say that Brentford is not the team we expected to see at the top. However, we predicted Southampton to be on the bottom. 
 
+# How is the Premier League Different from the Other "Big 5" Leagues Financially?
+
+```{r}
+#### Chunk5 - How is the Premier League Different from the Other "Big 5" Leagues Financially?
+
+### Plan: Goal, Needs, Steps
+
+## Goal: Use Transfermarket data to find differences of big 5 leagues
+
+## Needs: 
+# Nouns: Data, worldfootballR package, dplyr, tidyr, ggplot2, knitr
+# Verbs: worldfootballR functions, data wrangling verbs, ggplot functions
+
+## Steps
+# Import Packages
+# Load in Data
+# Wrangle data
+# Visualize difference in team/player valuations across leagues
+
+### Import Packages
+
+library(worldfootballR)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(knitr)
+library(kableExtra)
+library(scales) #for dollar formatting
+
+### Load in Data
+
+big_5_valuations <- tm_player_market_values(
+  country_name = c("England", "Spain", "Italy", "Germany", "France"),
+  start_year = 2024
+  )
+
+### Wrangle Data
+
+big_5_valuations_wrangled <- big_5_valuations %>%
+  select(
+    comp_name,
+    squad,
+    player_market_value_euro
+  )
+
+### Visualize difference in team valuations across big 5 leagues
+
+team_player_vals <- big_5_valuations_wrangled  %>%
+  group_by(comp_name, squad) %>%
+  summarise(
+    avg_player_value = 1.13 * mean(player_market_value_euro, na.rm = TRUE),
+    player_count = n(), #^adjusting for euro -> dollar conversion
+    .groups = "drop" #drop grouping for later analysis
+  ) 
+
+## Create Sorted Table
+
+# Table of ten teams with highest average player values
+
+top_ten <- team_player_vals %>% #selecting top 10
+  slice_max(
+    order_by = avg_player_value, 
+    n = 10) %>%
+  mutate(
+    avg_player_value = dollar(avg_player_value) #for formatting in table
+  )
+
+top_ten %>% #creating table
+  kable(
+    booktabs = TRUE,
+    align = c(rep("l", 4)),
+    col.names = c("Big 5 League", "Squad Name", "Average Player Value", "# of Players")
+  ) %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "condensed"),
+    font_size = 16
+  )
+
+
+# Table of ten lowest average player values
+
+bottom_ten <- team_player_vals %>% #selecting bottom 10
+  slice_min(
+    order_by = avg_player_value, 
+    n = 10) %>%
+  mutate(
+    avg_player_value = dollar(avg_player_value) #for formatting in table
+  )
+
+bottom_ten %>% #creating table
+  kable(
+    booktabs = TRUE,
+    align = c(rep("l", 4)),
+    col.names = c("Big 5 League", "Squad Name", "Average Player Value", "# of Players")
+  ) %>%
+  kableExtra::kable_styling(
+    bootstrap_options = c("striped", "condensed"),
+    font_size = 16
+  )
+
+### Visualize difference in league valuations across big 5 leagues
+
+league_team_vals <- team_player_vals  %>%
+  group_by(comp_name) %>%
+  summarise(
+    avg_team_value = 1.13 * mean(avg_player_value, na.rm = TRUE) / 1000000,
+    team_count = n()
+  )
+
+## Create Viz (Bar chart of 5 leagues average)
+
+ggplot(
+  league_team_vals, 
+  aes(
+    x = comp_name,
+    y = avg_team_value
+    )
+  ) + 
+  geom_bar(
+    stat = "identity"
+  ) +
+  labs(
+    x = "Big 5 League",
+    y = "Average Team Valuation (Millions of Dollars)"
+  ) +
+  theme_bw()
+
+
+
+```
 
 # Conclusion
 
 This project allowed us to dive deep into the statistics for the 2024-25 season of the Premier League. We were able to smoothly answer all of our research questions and discovered new information about the sport. While we were already familiar with professional soccer, we have unlocked new trends in the realm of soccer analytics. Not only are these visualizations useful for soccer fans, but it can also be helpful for those who do not watch soccer or for those who are trying to get into the sport. Everything is explained pretty well. In the end, we used data analytics to find trends within teams and the sport.
+
+# Code Appendix
+
+```{r codeAppend, ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
+```
