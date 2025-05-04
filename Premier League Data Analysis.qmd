@@ -11,6 +11,7 @@ execute:
 
 The Premier League is a professional soccer league in England and is the highest level in the English system. The English system runs on a promotion and relegation style. Each season 20 teams fight to stay out of the relegation zone and compete for the Premier League title. Soccer, like any other sport, can be benefited from data analytics. In this sport, data can be used to find the most optimal strategies, whether it is playing the possession game or playing fast. Some standout analytics from this sport consists of win percentage, shot conversion rate, etc. In this project we answered four important research questions.
 
+## Research Questions
 
 # Data Provenance
 
@@ -22,3 +23,215 @@ The Premier League is a professional soccer league in England and is the highest
 # FAIR Principles
 
 # CARE Principles
+
+Our data does not include any offensive, sensitive, or community-specific information and data. We practiced ethical guidelines and standards throughout the entire project. The data we collected is available for public use. When working on our analysis we were fair and focused on the collective benefit principle. We made sure we remained unbiased and did not access any private information while collecting the data.
+
+
+# Does Having a Higher Possession Percentage Translate to Wins?
+
+For this research question, we want to visualize the average possession percentage for all twenty Premier League teams in the 2024-25 season and compare it to how many wins each team has. This will answer our question on if having higher possession means more wins. 
+
+We did this by first installing and calling the required packages. Then we took the scraped data and focus on the possession stat type. We then created a new function to obtain all the teams and their wins this season. We cleaned the data to focus on only wins, possession, and squads. Then, we combined the data and plotted it. On the plot, every team is a black dot. We figured that since this analysis is more focused on the location of the points, we do not need to identify each team with a specific color. We added a trend line to see who is above and below, which will also help us answer our question. We used a scatter plot to see each team's win total by their average possession percentage.
+
+```{r}
+#devtools::install_github("JaseZiv/worldfootballR")
+#installs most updated version of worldfootballR package
+#This package allows easy scraping of FBref and Transfermarkt
+#https://jaseziv.github.io/worldfootballR/articles/extract-fbref-data.html
+library(worldfootballR)
+library(dplyr)
+
+
+#Function to extract a season of team stats from a particular league (PL here)
+#stat_types are league_table, league_table_home_away, standard
+#keeper, keeper_adv, shooting, passing, passing_types, goal_shot_creation
+#defense, possession, playing_time, misc
+pl_team_stats_raw <- fb_season_team_stats(
+  country = "ENG", 
+  gender = "M", 
+  season_end_year = 2025, 
+  tier = "1st", 
+  stat_type = "standard"
+  )
+
+# GOAL: Use scraped data and clean data to create a data visualization that 
+# displays and answers our research questions, "Does having a higher average possession
+# "percentage translate to wins?"
+
+# NEEDS: Verbs --> filter, select, inner_join, mutate
+# NEEDS: Nouns --> worldFootballR package, all necessary libraries, team stats
+
+# STEPS:
+# 1. Install the packages and call them
+# 2. Call needed libraries to scrape data
+# 3. Call all functions from scraping data
+# 4. Create new R file to answer research question
+# 5. Call all needed libraries
+# 6. Create a function to obtain the possession stat for male first
+# tier teams in England only, most recent year.
+# 7. Create a function to obtain the table of the male first tier league in
+# England, in the most recent year.
+# 8. Clean the possession data, with necessary verbs.
+# 9. Clean the league table data
+# 10. Join the two cleans data and put into one
+# 11. Create visualization for the conjoined data.
+
+
+# Calls all needed libraries
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+
+# Focuses on possession for all the teams in English Mens' First Tier
+pl_possession <- fb_season_team_stats(
+  country = "ENG", 
+  gender = "M", 
+  season_end_year = 2025, 
+  tier = "1st", 
+  stat_type = "possession"
+)
+
+# Focuses on the teams on the table in most recent year
+pl_table <- fb_season_team_stats(
+  country = "ENG", 
+  gender = "M", 
+  season_end_year = 2025, 
+  tier = "1st", 
+  stat_type = "league_table"
+)
+
+# Cleans the possession data
+pl_possession_clean <- pl_possession %>%
+  filter(!str_starts(Squad, "vs ")) %>% # Gets rid of average opposing possession
+  select(Squad, Poss) %>% # Focuses on team and the possession percentage
+  mutate(Poss = as.numeric(str_remove(Poss, "%"))) 
+
+
+# Cleans the league table data
+pl_table_clean <- pl_table %>%
+  filter(!str_starts(Squad, "vs ")) %>% # Filters out average opposing once again
+  select(Squad, W) # Focuses on the team and the wins
+
+
+# Combines the two clean datas
+pl_poss_wins <- pl_possession_clean %>%
+  inner_join(pl_table_clean, by = "Squad")
+
+
+# Creates scatter plot for the combined data
+ggplot(
+  data = pl_poss_wins,
+  mapping = aes(
+    x = Poss,
+    y = W
+  )
+) +
+  geom_point(size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed") +
+  labs(
+    x = "Possession Percentage",
+    y = "Wins",
+    title = "Wins by Possession Percentage"
+  ) +
+  theme_bw() +
+  theme(
+    legend.position = "bottom"
+  )
+```  
+
+As we can see in the figure above, many points reside above the trend line. We can also see that almost every team with an estimated average possession percentage of 57 are close to 17 wins and above, which is also above the trend line. The teams with a lower percentage can be seen towards the bottom of plot where the wins are around 14 and less. However, there is one outlier that has an percentage of just over 40, and they have more about 17 wins. Other than the outlier, we can see that teams with a higher average possession rate tend to win more games. This is what we expected the result to be.
+
+# Shot Conversion Rate
+
+In this analysis, we took a look at which teams have the best shot conversion rate and which teams have the worst. We believe this is a great analytic to look at to see which teams are attack heavy and which teams are most consistent on the attack.
+
+To do this, we used our scraped data and called it where we focused on the shooting statistics. We then cleaned the data and added the shot conversion rate formula to the function. The formula is easy. It is the amount of goals scored divided by the amount of shots taken. Then, you divide that number by 100 to find the percentage. Then we plotted this data using a horizontal bar chart, where the teams are on the left and the percent is on the bottom. We can easily observe the data and answer our question.
+
+```{r}
+
+#devtools::install_github("JaseZiv/worldfootballR")
+#installs most updated version of worldfootballR package
+#This package allows easy scraping of FBref and Transfermarkt
+#https://jaseziv.github.io/worldfootballR/articles/extract-fbref-data.html
+library(worldfootballR)
+library(dplyr)
+
+
+#Function to extract a season of team stats from a particular league (PL here)
+#stat_types are league_table, league_table_home_away, standard
+#keeper, keeper_adv, shooting, passing, passing_types, goal_shot_creation
+#defense, possession, playing_time, misc
+pl_team_stats_raw <- fb_season_team_stats(
+  country = "ENG", 
+  gender = "M", 
+  season_end_year = 2025, 
+  tier = "1st", 
+  stat_type = "standard"
+  )
+
+# GOAL: Use scraped and clean data to find each Premier League teams'
+# shot conversion rate in the 2024-25 season. This will help answer our 
+# question of which team has the best shot conversion rate and which has the worst.
+
+# NEEDS: Verbs --> filter, select, mutate, arrange
+# NEEDS: Nouns --> worldFootballR package, all necessary libraries, team stats
+
+# STEPS:
+# 1. Install the packages and call them
+# 2. Call needed libraries to scrape data
+# 3. Call all functions from scraping data
+# 4. Create new R file to answer research question
+# 5. Call all needed libraries
+# 6. Create a function to obtain the shooting stats for each premier league team
+# 7. Create a function that cleans the shooting stats and uses the shot conversion rate
+# 8. Clean the possession data, with necessary verbs.
+# 9. Create visualization for the conjoined data.
+
+
+# Calls all needed libraries
+library(ggplot2)
+
+
+# Focuses on shooting for all the teams in English Mens' First Tier
+pl_shooting <- fb_season_team_stats(
+  country = "ENG", 
+  gender = "M", 
+  season_end_year = 2025, 
+  tier = "1st", 
+  stat_type = "shooting"
+)
+
+
+# Cleans shooting data and uses the shot conversion formula
+pl_conversion <- pl_shooting %>%
+  filter(!str_starts(Squad, "vs ")) %>%
+  select(Squad, Goals = Gls_Standard, Shots = Sh_Standard) %>%
+  mutate(
+    ConversionRate = (Goals / Shots) * 100
+  ) %>%
+  arrange(desc(ConversionRate))
+
+# Creates a horizontal bar chart to visualize the shot conversion rate for each team
+ggplot(
+  data = pl_conversion,
+  mapping = aes(
+    x = reorder(Squad, ConversionRate),
+    y = ConversionRate
+  )
+) +
+  geom_col(fill = "#18a7db") +
+  coord_flip() +
+  labs(
+    title = "Premier League Teams Shot Conversion Rate (2024-25)",
+    x = "Team",
+    y = "Shot Conversion Rate (%)"
+  ) +
+  theme_minimal()
+```
+
+From this bar chart, we can discover that Brentford has the highest shot conversion rate with 15 percent. We can also observe that Southampton has the worst shot conversion rate with a rate about 6.5 percent. This data does not necessarily tell us which teams are the worst and best teams but rather which teams tend me to the most consistent when having an opportunity to score. As we are soccer fans ourselves, we recognize each team's skill level and we can confidently say that Brentford is not the team we expected to see at the top. However, we predicted Southampton to be on the bottom. 
+
+
+# Conclusion
+
+This project allowed us to dive deep into the statistics for the 2024-25 season of the Premier League. We were able to smoothly answer all of our research questions and discovered new information about the sport. While we were already familiar with professional soccer, we have unlocked new trends in the realm of soccer analytics. Not only are these visualizations useful for soccer fans, but it can also be helpful for those who do not watch soccer or for those who are trying to get into the sport. Everything is explained pretty well. In the end, we used data analytics to find trends within teams and the sport.
