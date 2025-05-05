@@ -71,11 +71,17 @@ Reusable - The data includes many relevant, accurate attributes. In addition, th
 
 # CARE Principles
 
-Our data does not include any offensive, sensitive, or community-specific information and data. We practiced ethical guidelines and standards throughout the entire project. The data we collected is available for public use. When working on our analysis we were fair and focused on the collective benefit principle. We made sure we remained unbiased and did not access any private information while collecting the data.
+Collective-Benefit - This data helps benefit those who are sports fans, data analysts, etc.
+
+Authority to Control - The data we collected is available for public use. We did not access any private information while collecting the data
+
+Responsibility - We did not include any offensive, sensitive, or any irregular information in our data.
+
+Ethics - We were fair and focused on the all the principles. We remained unbiased.
 
 # Does Having a Higher Possession Percentage Translate to Wins?
 
-For this research question, we want to visualize the average possession percentage for all twenty Premier League teams in the 2024-25 season and compare it to how many wins each team has. This will answer our question on if having higher possession means more wins. 
+For this research question, we want to visualize the average possession percentage for all twenty Premier League teams in the 2024-25 season and compare it to how many wins each team has. In soccer, possession is essentially how long a team controls the ball for the entire game. So, the max possession percentage is 100, which is quite impossible. This will answer our question on if having higher possession means more wins. 
 
 We did this by first installing and calling the required packages. Then we took the scraped data and focus on the possession stat type. We then created a new function to obtain all the teams and their wins this season. We cleaned the data to focus on only wins, possession, and squads. Then, we combined the data and plotted it. On the plot, every team is a black dot. We figured that since this analysis is more focused on the location of the points, we do not need to identify each team with a specific color. We added a trend line to see who is above and below, which will also help us answer our question. We used a scatter plot to see each team's win total by their average possession percentage.
 
@@ -419,7 +425,7 @@ test_info %>% kable(
 
 # Which Teams Have the Best and Worst Shot Conversion Rates?
 
-In this analysis, we took a look at which teams have the best shot conversion rate and which teams have the worst. We believe this is a great analytic to look at to see which teams are attack heavy and which teams are most consistent on the attack.
+In this analysis, we took a look at which teams have the best shot conversion rate and which teams have the worst. Shot conversion rate is the rate at which a player scores when they shoot. Everytime they shoot, the rate changes based on whether it goes in or not. We believe this is a great analytic to look at to see which teams are attack heavy and which teams are most consistent on the attack.
 
 To do this, we used our scraped data and called it where we focused on the shooting statistics. We then cleaned the data and added the shot conversion rate formula to the function. The formula is easy. It is the amount of goals scored divided by the amount of shots taken. Then, you divide that number by 100 to find the percentage. Then we plotted this data using a horizontal bar chart, where the teams are on the left and the percent is on the bottom. We can easily observe the data and answer our question.
 
