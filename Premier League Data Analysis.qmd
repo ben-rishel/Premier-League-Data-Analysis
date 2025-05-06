@@ -12,17 +12,21 @@ execute:
 
 # Introduction
 
-The Premier League is a professional soccer league in England and is the highest level in the English system. The English system runs on a promotion and relegation style. Each season 20 teams fight to stay out of the relegation zone and compete for the Premier League title. Soccer, like any other sport, can benefit from data analytics. In this sport, data can be used to find the most optimal strategies, whether it is playing the possession game or playing fast. While there are some cutting edge statistics in soccer like expected goals and expected points (more details to come), some of the timeless statistics like possession and win rates are useful as well. In this project we answered four important research questions regarding the 2025 Premier League Season (35/38 matchdays completed at the creation of the analysis).
+The Premier League is a professional soccer league in England and is the highest level in the English system. The English system runs on a promotion and relegation style. Each season 20 teams fight to stay out of the relegation zone and compete for the Premier League title. Soccer, like any other sport, can benefit from data analytics. In this sport, data can be used to find the most optimal strategies, whether it is playing the possession game or playing fast. While there are some cutting edge statistics in soccer like expected goals and expected points (more details to come), some of the timeless statistics like possession and win rates are useful as well. In this project we answered four important research questions regarding the 2025 Premier League Season (35/38 matchdays completed at the creation of the analysis). Here are the research questions and the attributes that they each focused on. If you don't understand what the question means or what the attributes are, do not worry. They will be fully explained in each section.
 
 ## Research Questions
 
 1. Does Having a Higher Possession Percentage Translate to Wins?
+  Attributes of Focus: Possesion Percentage and Wins
 
 2. Is Home-Field Advantage Real?
+  Attributes of Foucs: Points Gained at Home, xPoints Gained at Home
 
 3. Which Teams Have the Best and Worst Shot Conversion Rates?
+  Attribute of Focus: Shot Conversion Rate
 
 4. How is the Premier League Different from the Other "Big 5" Leagues Financially?
+  Attribute of Focus: Team Valuations
 
 # Data Provenance
 
@@ -48,7 +52,9 @@ Cases: Just like Football Reference, Transfermarkt contains many tables with dif
 
 ## Note on How We Used Data
 
-For both the Football Reference and Transfermarkt data, we used the worldfootballR package to scrape the data. To install the most updated version of worldfootballR package, refer to the beginning of the code appendix.
+For Football Reference, we used the worldfootballR package to scrape the data. To install the most updated version of worldfootballR package, refer to the beginning of the code appendix.
+
+For Transfermarkt, we initially used the worldfootballR package as well. However, one day before the project, this part of the project was essentially destroyed as Transfermarkt changed their website and the worldfootballR package no longer worked. Last minute, we were able to just copy and paste the limited data that we needed from Transfermarkt into a google sheet. We then read this in using the googlesheets4 package.
 
 ```{r}
 #### Chunk1 - How to Install Updated worldfootballR
@@ -73,7 +79,7 @@ Reusable - The data includes many relevant, accurate attributes. In addition, th
 
 Collective-Benefit - This data helps benefit those who are sports fans, data analysts, etc.
 
-Authority to Control - The data we collected is available for public use. We did not access any private information while collecting the data
+Authority to Control - The data we collected is available for public use. We did not access any private information while collecting the data.
 
 Responsibility - We did not include any offensive, sensitive, or any irregular information in our data.
 
@@ -163,7 +169,7 @@ ggplot(
   )
 ) +
   geom_point(size = 3) +
-  geom_smooth(method = "lm", se = FALSE, color = "red", linetype = "dashed") +
+  geom_smooth(method = "lm", se = FALSE, color = "#69b3a2", linetype = "dashed") +
   labs(
     x = "Possession Percentage",
     y = "Wins",
@@ -175,9 +181,11 @@ ggplot(
   )
 ```  
 
-As we can see in the figure above, many points reside above the trend line. We can also see that almost every team with an estimated average possession percentage of 57 are close to 17 wins and above, which is also above the trend line. The teams with a lower percentage can be seen towards the bottom of plot where the wins are around 14 and less. However, there is one outlier that has an percentage of just over 40, and they have more about 17 wins. Other than the outlier, we can see that teams with a higher average possession rate tend to win more games. This is what we expected the result to be.
+As we can see in the figure above, the trend line goes up and to the right which represents a positive correlation between possession percentage and wins. We can also see that almost every team with an average possession of at least 57% have at least 17 wins, which is also above the trend line. The teams with a lower percentage can be seen towards the bottom of plot where the wins are around 14 and less. However, there is one outlier that has an percentage of just over 40, and they have more about 17 wins. Other than the outlier, we can see that teams with a higher average possession rate tend to win more games. This is what we expected the result to be.
 
 # Is Home-Field Advantage Real?
+
+Next, we will analyze whether or not home-field advantage is real in this Premier League season. Home-field advantage has long been a part of sports discourse. The theory is that teams perform better when they play in their home stadium/arena for a multitude of factors. These factors include the support of their fans, the lack of travel necessary, and the comfort of being at home. To determine whether this is real or not in the Premier League, we will first analyze a stat we created called "Points Gained at Home Per Match". The point system in soccer is used to track how well teams have performed in a season and to organize the league table. If you have the most points at the end of the season you win the league. If you win a game, you get three points. If you tie, you get one point. And if you lose, you get zero points. "Points Gained at Home Per Match" is the difference between average points at home and average points at away matches. For example, if a team has a value 0.5 "Points Gained at Home Per Match", that means that they average 0.5 more points in home games as compared to away games. Let's take a look at a density chart of all 20 Premier League teams.
 
 ```{r}
 #### Chunk3 - Is Home-Field Advantage Real?
@@ -259,10 +267,12 @@ ggplot(
     limits = c(-.75, 1.1) #Making sure all data fits by setting x bounds
     ) + 
   theme_light()
+```
+As you can see in <Figure>, the density is centered above 0, which shows that the average "Points Gained at Home Per Match" is positive. This shows some early evidence that home-field advantage may be real. However, we can see that there is some significant density to the left of 0, so not every team has the same benefit. There is also the argument that points is not necessarily the best metric to determine how well teams have performed. In soccer, scoring goals often includes luck. When scores are as low as 0-0, 1-0, or 1-1, a single lucky bounce can have a tremendous impact on the game. To help control for luck and to better measure the performance of teams in games, the expected goals (xG) stat has become quite popular. Expected goals measured how many goals a team would score historically given where the shots they took were and how many shots they took. As a result, a team that won 1-0 on a lucky shot may have just 0.05 xG, which is a better representation of how they performed. Using xG, we can determine the expected points (xPoints) of a team based on the results of their games given the xG they and their opposition had. Let's now take a look at a top-bottom density plot with "Points Gained at Home Per Match" and "xPoints Gained at Home per Match" on the bottom.
+```{r}
+#### Chunk3.1 - Is Home-Field Advantage Real?
 
-
-
-## Top/Bottom Density Plot that Compares Points vs. Expected Points
+## Top-Bottom Density Plot that Compares Points vs. Expected Points
 ggplot(
   data = pl_more_pts_home,
   aes(x = Pts_gained_at_home_per_match)
@@ -289,7 +299,10 @@ ggplot(
     title = "Premier League Points/Expected Points Gained at Home"
   ) +
   theme_light()
-
+```
+In <Figure> you can see that "xPoints Gained at Home per Match" is centered at a higher value than "Points Gained at Home Per Match". However, there is also a slight peak of density below zero as well. From this chart, we can conclude that teams generally do gain points and xPoints at home. To see whether or not this is a statistically significant difference, let's run a one-sided t-test with alpha=0.05. Our null hypothesis is that there are no points gained at home in the 2025 Premier League season.
+```{r}
+#### Chunk3.2 - Is Home-Field Advantage Real?
 
 ### Testing League-Wide Home Field Advantage Statistical Significance
 
@@ -343,28 +356,31 @@ test_info <- data.frame(
   `Average Points Gained` = mean(pl_homePtsGained$homePtsGained),
   `T-Statistic` = unname(test$statistic),
   `P-Value`     = test$p.value,
-  `CI-lower`    = test$conf.int[1],
-  `CI-upper`    = test$conf.int[2],
   check.names   = FALSE  # keep our nice column names
 )
 
 ## Create Nice Table with Kable - "One-Sample T-Test: Home vs. Away Point Difference"
 test_info %>% kable(
       digits  = 3,
-      align = c(rep("c", 5))
+      align = c(rep("c", 3))
       ) %>%
   kableExtra::kable_styling(
     bootstrap_options = c("striped", "condensed"),
-    font_size = 16
+    font_size = 16,
+    full_width = FALSE,
+    position = "center"
   )
-
+```
+As you can see from the <table>, the p-value is just barely above the alpha of 0.05 at 0.054. Therefore, we can not reject the null and do not have statistically significant evidence of home-field advantage for the Premier League 2025 season. Out of curiosity, let's check a bigger sample from 2022-2025. We will run another one-sided t-test with alpha=0.05 and the null hypothesis is that there are no points gained at home in the 2022-2025 Premier League seasons.
+```{r}
+#### Chunk3.4 - Is Home-Field Advantage Real?
 
 ### Testing League-Wide Home Field Advantage Statistical Significance 2022-2025
 
-pl_2020_2025_match_raw <- fb_match_results(country = "ENG", gender = "M", season_end_year = c(2022,2023,2024,2025), tier = "1st")
+pl_2022_2025_match_raw <- fb_match_results(country = "ENG", gender = "M", season_end_year = c(2022,2023,2024,2025), tier = "1st")
 
 ## Selecting attributes for analysis, and making them numeric values
-pl_2020_2025_match <- pl_2020_2025_match_raw %>%
+pl_2022_2025_match <- pl_2022_2025_match_raw %>%
   select(
     HomeGoals,     
     AwayGoals
@@ -375,7 +391,7 @@ pl_2020_2025_match <- pl_2020_2025_match_raw %>%
   drop_na(HomeGoals, AwayGoals) #dropping nullified matches
 
 ## Creating Summary Table with Match as Case, attributes homePts, awayPts
-pl_homeAwayPts <- pl_2020_2025_match %>%
+pl_homeAwayPts <- pl_2022_2025_match %>%
   mutate(
     homePts = case_when( #When home scores more - win, if same - tie
       HomeGoals  > AwayGoals ~ 3,
@@ -406,8 +422,6 @@ test_info <- data.frame(
   `Average Points Gained` = mean(pl_homePtsGained$homePtsGained),
   `T-Statistic` = unname(test$statistic),
   `P-Value`     = test$p.value,
-  `CI-lower`    = test$conf.int[1],
-  `CI-upper`    = test$conf.int[2],
   check.names   = FALSE  # keep our nice column names
 )
 
@@ -418,10 +432,14 @@ test_info %>% kable(
 ) %>%
   kableExtra::kable_styling(
     bootstrap_options = c("striped", "condensed"),
-    font_size = 16
+    font_size = 16,
+    full_width = FALSE,
+    position = "center"
   )
 
 ```
+From <table>, we can see that the p-value is absolutely below the alpha of 0.05 and we can safely reject the null hypothesis in favor of the alternative which is that there are positive points gained at home per match in the 2022-2025 Premier League season, and therefore homefield advantage existed during this time period.
+
 
 # Which Teams Have the Best and Worst Shot Conversion Rates?
 
@@ -484,7 +502,7 @@ ggplot(
     y = ConversionRate
   )
 ) +
-  geom_col(fill = "#18a7db") +
+  geom_col(fill = "#69b3a2") +
   coord_flip() +
   labs(
     title = "Premier League Teams Shot Conversion Rate (2024-25)",
@@ -497,6 +515,8 @@ ggplot(
 From this bar chart, we can discover that Brentford has the highest shot conversion rate with 15 percent. We can also observe that Southampton has the worst shot conversion rate with a rate about 6.5 percent. This data does not necessarily tell us which teams are the worst and best teams but rather which teams tend me to the most consistent when having an opportunity to score. As we are soccer fans ourselves, we recognize each team's skill level and we can confidently say that Brentford is not the team we expected to see at the top. However, we predicted Southampton to be on the bottom. 
 
 # How is the Premier League Different from the Other "Big 5" Leagues Financially?
+
+In world football (or soccer as we call it), there are five leagues known as the "Big 5" leagues that are considered to be superior to the rest of the leagues in the world. These five leagues are the Bundesliga in Germany, La Liga in Spain, Ligue 1 in France, Serie A in Italy, and the Premier League in England. For this part of the analysis, we are going to take a look at how the Premier League compares to these leagues financially. The data we will be using to measure the value of teams and leagues is the teams estimated valuation via Transfermarkt.  Out of curiosity, let's first take a look at the teams that have the highest and lowest valuations.
 
 ```{r}
 #### Chunk5 - How is the Premier League Different from the Other "Big 5" Leagues Financially?
@@ -517,119 +537,154 @@ From this bar chart, we can discover that Brentford has the highest shot convers
 
 ### Import Packages
 
-library(worldfootballR)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(knitr)
 library(kableExtra)
-library(scales) #for dollar formatting
+library(scales)     # dollar()
+library(googlesheets4)
+library(readr) #for parse_number function
 
-### Load in Data
+### Load in Data (google sheet)
 
-big_5_valuations <- tm_player_market_values(
-  country_name = c("England", "Spain", "Italy", "Germany", "France"),
-  start_year = 2024
-  )
+sheet_url <- "https://docs.google.com/spreadsheets/d/1S80k3N9s6KpMXTTkIb2YCQnrlBAdc8YoeB6YkqMbhc4/edit?gid=0#gid=0"
+gs4_deauth()
+big_5_valuations <- read_sheet(sheet_url)
 
-### Wrangle Data
+
+### Wrangle Data - add column with valuation as numeric figure
+## €1.31bn -> 1310000000
 
 big_5_valuations_wrangled <- big_5_valuations %>%
+  mutate(
+    valuation = case_when(
+      str_detect(Valuation, "bn") ~ parse_number(Valuation) * 1e9,
+      str_detect(Valuation, "m") ~ parse_number(Valuation) * 1e6,
+    )
+  ) %>%
   select(
-    comp_name,
-    squad,
-    player_market_value_euro
+    "Club",
+    "League",
+    "valuation"
   )
+  
 
 ### Visualize difference in team valuations across big 5 leagues
 
-team_player_vals <- big_5_valuations_wrangled  %>%
-  group_by(comp_name, squad) %>%
-  summarise(
-    avg_player_value = 1.13 * mean(player_market_value_euro, na.rm = TRUE),
-    player_count = n(), #^adjusting for euro -> dollar conversion
-    .groups = "drop" #drop grouping for later analysis
-  ) 
-
 ## Create Sorted Table
 
-# Table of ten teams with highest average player values
+# Table of ten teams with highest valuation
 
-top_ten <- team_player_vals %>% #selecting top 10
+top_ten <- big_5_valuations_wrangled %>% #selecting top 10
   slice_max(
-    order_by = avg_player_value, 
-    n = 10) %>%
-  mutate(
-    avg_player_value = dollar(avg_player_value) #for formatting in table
+    order_by = valuation, 
+    n = 10
+    ) %>%
+  mutate(              # 1.14 dollars/euro conversion 
+    valuation = dollar(1.14*valuation) #for formatting in table in dollars
   )
 
 top_ten %>% #creating table
   kable(
     booktabs = TRUE,
-    align = c(rep("l", 4)),
-    col.names = c("Big 5 League", "Squad Name", "Average Player Value", "# of Players")
+    align = c(rep("l", 3)),
+    col.names = c("Squad Name", "Big 5 League", "Valuation")
   ) %>%
   kableExtra::kable_styling(
     bootstrap_options = c("striped", "condensed"),
     font_size = 16
   )
+```
+As you can see, the top 10 is dominated by the "Big 6" Premier League clubs: Manchester City, Arsenal, Liverpool, Chelsea, Tottenham, and Manchester United. The rest of the top 10 is rounded out by the dominant clubs of La Liga, Ligue 1, and the Bundesliga. Real Madrid, Barcelona, PSG, and Bayern Munich are expectedly in this list as they are hugely successful clubs in some of the biggest cities in the world. It is important to note that there are no Italian clubs (Serie A) in this list which is a bit surprising. While this gives an idea that the Premier League may have more valuable teams in general, it is possible that the Premier League is top heavy. It is also possible that the other leagues are top heavy and their representation in the top 10 are outliers in their respective leagues. Let's check the bottom ten teams to see if we can learn anything else.
 
+```{r}
+#### Chunk5.1 - How is the Premier League Different from the Other "Big 5" Leagues Financially?
 
 # Table of ten lowest average player values
 
-bottom_ten <- team_player_vals %>% #selecting bottom 10
+bottom_ten <- big_5_valuations_wrangled %>% #selecting top 10
   slice_min(
-    order_by = avg_player_value, 
-    n = 10) %>%
-  mutate(
-    avg_player_value = dollar(avg_player_value) #for formatting in table
+    order_by = valuation, 
+    n = 10
+    ) %>%
+  mutate(              # 1.14 dollars/euro conversion 
+    valuation = dollar(1.14*valuation) #for formatting in table in dollars
   )
 
 bottom_ten %>% #creating table
   kable(
     booktabs = TRUE,
-    align = c(rep("l", 4)),
-    col.names = c("Big 5 League", "Squad Name", "Average Player Value", "# of Players")
+    align = c(rep("l", 3)),
+    col.names = c("Squad Name", "Big 5 League", "Valuation")
   ) %>%
   kableExtra::kable_styling(
     bootstrap_options = c("striped", "condensed"),
     font_size = 16
   )
+```
+The first most notable observation from this table is just how less valuable these teams are as compared to the top ten. At $46 million, CD Leganés is about just 3% of the total valuation of Manchester City. This shows just how financially unbalanced the sport of soccer is in Europe where there is no salary cap like most American sports. These teams at the bottom have virtually no chance of ever competing with the top teams. Again, there is an absence of Serie A teams from this list which is quite interesting. Serie A has no teams in the bottom ten or top ten which means that Serie A must have more financial balance between the teams within the league. The Premier League has no representation here which shows that maybe the Premier League really is just that much more valuable. Ligue 1 and the Bundesliga are most represented here which show that it is possible that Bayern Munich and PSG may have been outliers being so highly valued. Let's take a look at how the distributions as a whole compare across the leagues with a box plot.
+```{r}
+#### Chunk5.2 - How is the Premier League Different from the Other "Big 5" Leagues Financially?
 
 ### Visualize difference in league valuations across big 5 leagues
 
-league_team_vals <- team_player_vals  %>%
-  group_by(comp_name) %>%
-  summarise(
-    avg_team_value = 1.13 * mean(avg_player_value, na.rm = TRUE) / 1000000,
-    team_count = n()
+## Wrangle data to be displayed in a better scale
+
+big_5_valuations_wrangled <- big_5_valuations_wrangled %>%
+  mutate(
+    valuation = (1.14*valuation)/1000000
   )
 
-## Create Viz (Bar chart of 5 leagues average)
+## Create Viz (Box plot of 5 leagues valuations distributions)
 
 ggplot(
-  league_team_vals, 
+  big_5_valuations_wrangled, 
   aes(
-    x = comp_name,
-    y = avg_team_value
+    x = League,
+    y = valuation
     )
   ) + 
-  geom_bar(
-    stat = "identity"
+  geom_boxplot(
+    fill = "#69b3a2"
   ) +
   labs(
     x = "Big 5 League",
-    y = "Average Team Valuation (Millions of Dollars)"
+    y = "Team Valuations (millions of dollars)"
+  ) +
+  scale_y_continuous(
+    breaks = seq(0, 1500, by = 250)
   ) +
   theme_bw()
 
 
 
 ```
+As you can see in <figure>, the Premier League is indeed much more valuable compared to the other four "Big 5" leagues. In fact, the minimum valued Premier League team would be above the average value in any other of the leagues. In terms of outliers, it is interesting that Serie A does in fact of an positive outlier, but that it did not crack the top ten most valuable teams. It is also interesting that each league has at least one outlier that shows that each of the five leagues have a dominant teams, with La Liga being different with two dominant teams. While it might sound like a bit of a leap to say that just because a team is more valuable that they are a dominant team, being a successful team is the main way to accrue value. While branding and financial assets like a stadium are important, at the end of the day having greater value than others in your league come from being more successful than other teams. In conclusion, we can see that the Premier League is the most valuable of the "Big 5" leagues.
 
 # Conclusion
 
-This project allowed us to dive deep into the statistics for the 2024-25 season of the Premier League. We were able to smoothly answer all of our research questions and discovered new information about the sport. While we were already familiar with professional soccer, we have unlocked new trends in the realm of soccer analytics. Not only are these visualizations useful for soccer fans, but it can also be helpful for those who do not watch soccer or for those who are trying to get into the sport. Everything is explained pretty well. In the end, we used data analytics to find trends within teams and the sport.
+This project allowed us to dive deep into the statistics for the 2024-25 season of the Premier League. We were able to smoothly answer all of our research questions and discovered new information about the sport. While we were already familiar with professional soccer, we have unlocked new trends in the realm of soccer analytics. Not only are these visualizations useful for soccer fans, but it can also be helpful for those who do not watch soccer or for those who are trying to get into the sport. 
+
+Our project consisted of four main questions about the Premier League: 
+
+1. Does Having a Higher Possession Percentage Translate to Wins?
+
+2. Is Home-Field Advantage Real?
+
+3. Which Teams Have the Best and Worst Shot Conversion Rates?
+
+4. How is the Premier League Different from the Other "Big 5" Leagues Financially?
+
+Let's quickly recap what we discovered while analyzing each question:
+
+1. 
+
+2. While there are some signs that home-field advantage may be real for the 2025 season, in the end it was not statistically significant. However, when looking at data from 2022-2025, there was a statistically significant home-field advantage.
+
+3.
+
+4. The Premier League is cemented as the most valuable of the "Big 5" leagues by a wide margin.
 
 # Code Appendix
 
