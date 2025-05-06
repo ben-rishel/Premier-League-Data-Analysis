@@ -50,6 +50,10 @@ Why Did They Collect the Data: Transfermarkt collects all of this data to build 
 
 Cases: Just like Football Reference, Transfermarkt contains many tables with different cases. For the purpose of this analysis, we only used data in which a specific player is a case.
 
+# Coding Style
+
+The coding style that our code followed was the Tidyverse Style Guide. Because of the use of piping and the packages such as ggplot and the tidyverse family, we determined that this was the Tidyverse Style Guide.
+
 ## Note on How We Used Data
 
 For Football Reference, we used the worldfootballR package to scrape the data. To install the most updated version of worldfootballR package, refer to the beginning of the code appendix.
