@@ -45,7 +45,7 @@ We present the guidelines as a checklist in this file. This means that your team
   - [x] Your main data source may __not__ be one that we used in class. If you are interested in using data found in an R package, please consult with your instructor first.
   - [x] Supplementary data sources may come from anywhere.
 - [x] Read in your data and perform any necessary data tidying, wrangling, and cleaning.
-- [ ] Conduct Exploratory Data Analysis.
+- [x] Conduct Exploratory Data Analysis.
 - [ ] Prepare a reproducible report.
   - [ ] Use a QMD file; the output type is PDF.
   - [ ] The report should be well organized with section headings.
@@ -55,22 +55,22 @@ We present the guidelines as a checklist in this file. This means that your team
       ```{r codeAppend, ref.label=knitr::all_labels(), echo=TRUE, eval=FALSE}
       ```
 ````
-  - [ ] Describe the provenance of your data. That is, where did you get the data, who collected the data, for what purpose, who/what make up the cases.
-  - [ ] Explain how your data meet the FAIR and/or CARE Principles.
-  - [ ] Describe what attributes you'll focus your analysis on (mention if they are part of your data sets or if you created them out of your data sets).
-  - [ ] Create multiple data visualizations (tables and figures) that assist both the team and readers in understanding the data.
-    - [ ] Data visualizations should show a variety of your skills and geometries.
+  - [x] Describe the provenance of your data. That is, where did you get the data, who collected the data, for what purpose, who/what make up the cases.
+  - [x] Explain how your data meet the FAIR and/or CARE Principles.
+  - [x] Describe what attributes you'll focus your analysis on (mention if they are part of your data sets or if you created them out of your data sets).
+  - [x] Create multiple data visualizations (tables and figures) that assist both the team and readers in understanding the data.
+    - [x] Data visualizations should show a variety of your skills and geometries.
     - [ ] __Optional__: If your explorations and data make sense to do so, try creating a map.
     - [ ] Data visualizations should be appropriately sized--not too small and not too big.
     - [ ] Figures and Tables should have appropriate captions and appropriately cross-referenced in the body of your report.
-    - [ ] Your team must produce at least one table that is *not* a display of raw data or a listing of data cases or columns.
-    - [ ] Your team must produce at least one plot/graph.
-    - [ ] There should be narrative text helping readers to better understand what each visualization helps them to learn about the data and context.
-  - [ ] Your report should contain narrative text (beyond explaining tables and figures) that explains the overall data story or context and helps the reader make sense of what is going on. That is, Take the reader on a journey.
-  - [ ] __Optional:__ For those who want to challenge themselves further, feel free to include a section on using other statistical methods such as hypothesis testing, regression, ANOVA, or machine learning--see Chapter 18 of the Data Computing eBook. Keep in mind that this will not grant your group any extra credit.
+    - [x] Your team must produce at least one table that is *not* a display of raw data or a listing of data cases or columns.
+    - [x] Your team must produce at least one plot/graph.
+    - [x] There should be narrative text helping readers to better understand what each visualization helps them to learn about the data and context.
+  - [x] Your report should contain narrative text (beyond explaining tables and figures) that explains the overall data story or context and helps the reader make sense of what is going on. That is, Take the reader on a journey.
+  - [x] __Optional:__ For those who want to challenge themselves further, feel free to include a section on using other statistical methods such as hypothesis testing, regression, ANOVA, or machine learning--see Chapter 18 of the Data Computing eBook. Keep in mind that this will not grant your group any extra credit.
   - [ ]  You should properly cite any work you reference (including data) according to your choice of citation style. We've included files for APA7 and MLA9 as part of this template. If you want to use a different citation style, you will need download the CSL file from the [Zotero Style Respository](https://www.zotero.org/styles/) and include it in your team's repo.
     - __Fall Back Plan__ You can also put your citations as footnotes and make your own reference list at the end of your document.
-- [ ] Use GitHub to share changes and edits; there should be multiple commits to your repo.
+- [x] Use GitHub to share changes and edits; there should be multiple commits to your repo.
   - [ ] Each team should update the included README file to match their project.
   - [x] Each team member must have at least two (2) commits in the repo's history.
   - [x] There should be a Main branch and at least one development ("dev") branch for the repo.
