@@ -678,11 +678,11 @@ Our project consisted of four main questions about the Premier League:
 
 Let's quickly recap what we discovered while analyzing each question:
 
-1. 
+1. From what the visual showed, we saw that most teams with a higher average possession percentage had more wins than others.
 
 2. While there are some signs that home-field advantage may be real for the 2025 season, in the end it was not statistically significant. However, when looking at data from 2022-2025, there was a statistically significant home-field advantage.
 
-3.
+3. Brentford had the best shot conversion rate and Southampton had the worst.
 
 4. The Premier League is cemented as the most valuable of the "Big 5" leagues by a wide margin.
 
