@@ -7,14 +7,9 @@ format:
   pdf:
     toc: false
     number-sections: true
-    number-depth: 12
+    number-depth: 2
     fig-align: center
     cap-location: top
-    geometry:
-      - top=1in
-      - left=1in
-      - right=1in
-      - bottom=1in
     colorlinks: true
 execute:
   echo: false
@@ -75,6 +70,7 @@ For Transfermarkt, we initially used the worldfootballR package as well. However
 #installs most updated version of worldfootballR package
 #This package allows easy scraping of FBref and Transfermarkt
 #https://jaseziv.github.io/worldfootballR/articles/extract-fbref-data.html
+
 ```
 
 ## Coding Style
@@ -109,6 +105,7 @@ For this research question, we want to visualize the average possession percenta
 We did this by first installing and calling the required packages. Then we took the scraped data and focus on the possession stat type. We then created a new function to obtain all the teams and their wins this season. We cleaned the data (FBref, 2025a) to focus on only wins, possession, and squads. Then, we combined the data and plotted it. On the plot, every team is a black dot. We figured that since this analysis is more focused on the location of the points, we do not need to identify each team with a specific color. We added a trend line to see who is above and below, which will also help us answer our question. We used a scatter plot to see each team's win total by their average possession percentage.
 
 ```{r}
+#| fig-cap: "Wins vs. Possession Percentage"
 #| label: fig-possession 
 
 #### Chunk2 - Does Having a Higher Possession Percentage Translate to Wins?
@@ -200,6 +197,7 @@ ggplot(
   theme(
     legend.position = "bottom"
   )
+
 ```  
 
 As we can see in the @fig-possession, the trend line goes up and to the right which represents a positive correlation between possession percentage and wins. We can also see that almost every team with an average possession of at least 57% have at least 17 wins, which is also above the trend line. The teams with a lower percentage can be seen towards the bottom of plot where the wins are around 14 and less. However, there is one outlier that has an percentage of just over 40, and they have more about 17 wins. Other than the outlier, we can see that teams with a higher average possession rate tend to win more games. This is what we expected the result to be.
@@ -209,6 +207,7 @@ As we can see in the @fig-possession, the trend line goes up and to the right wh
 Next, we will analyze whether or not home-field advantage is real in this Premier League season. Home-field advantage has long been a part of sports discourse. The theory is that teams perform better when they play in their home stadium/arena for a multitude of factors. These factors include the support of their fans, the lack of travel necessary, and the comfort of being at home. To determine whether this is real or not in the Premier League, we will first analyze a stat we created called "Points Gained at Home Per Match". The point system in soccer is used to track how well teams have performed in a season and to organize the league table. If you have the most points at the end of the season you win the league. If you win a game, you get three points. If you tie, you get one point. And if you lose, you get zero points. "Points Gained at Home Per Match" is the difference between average points at home and average points at away matches. For example, if a team has a value 0.5 "Points Gained at Home Per Match", that means that they average 0.5 more points in home games as compared to away games. Let's take a look at a density chart of all 20 Premier League teams. For this section we will first use team stats data for the 2024-2025 season (FBref, 2025a) and then individual match data from the 2024-2025 season for a significance test (FBref, 2025b).
 
 ```{r}
+#| fig-cap: "Premier League Points Gained at Home"
 #| label: fig-density1
 
 #### Chunk3 - Is Home-Field Advantage Real?
@@ -283,16 +282,17 @@ ggplot(
   ) + 
   labs(
     x = "Points Gained Per Match at Home",
-    y = "Density",
-    title = "Premier League Points Gained at Home"
+    y = "Density"
   ) +
   scale_x_continuous(
     limits = c(-.75, 1.1) #Making sure all data fits by setting x bounds
     ) + 
   theme_light()
+
 ```
 As you can see in @fig-density1, the density is centered above 0, which shows that the average "Points Gained at Home Per Match" is positive. This shows some early evidence that home-field advantage may be real. However, we can see that there is some significant density to the left of 0, so not every team has the same benefit. There is also the argument that points is not necessarily the best metric to determine how well teams have performed. In soccer, scoring goals often includes luck. When scores are as low as 0-0, 1-0, or 1-1, a single lucky bounce can have a tremendous impact on the game. To help control for luck and to better measure the performance of teams in games, the expected goals (xG) stat has become quite popular. Expected goals measured how many goals a team would score historically given where the shots they took were and how many shots they took. As a result, a team that won 1-0 on a lucky shot may have just 0.05 xG, which is a better representation of how they performed. Using xG, we can determine the expected points (xPoints) of a team based on the results of their games given the xG they and their opposition had. Let's now take a look at a top-bottom density plot with "Points Gained at Home Per Match" and "xPoints Gained at Home per Match" on the bottom.
 ```{r}
+#| fig-cap: "Premier League Points/Expected Points Gained at Home"
 #| label: fig-density2
 
 #### Chunk3.1 - Is Home-Field Advantage Real?
@@ -320,14 +320,15 @@ ggplot(
   ) + 
   labs(
     x = "Points/xPoints Gained Per Match at Home",
-    y = "Density",
-    title = "Premier League Points/Expected Points Gained at Home"
+    y = "Density"
   ) +
   theme_light()
+
 ```
 In @fig-density2 you can see that "xPoints Gained at Home per Match" is centered at a higher value than "Points Gained at Home Per Match". However, there is also a slight peak of density below zero as well. From this chart, we can conclude that teams generally do gain points and xPoints at home. To see whether or not this is a statistically significant difference, let's run a one-sided t-test with alpha=0.05. Our null hypothesis is that there are no points gained at home in the 2025 Premier League season.
 ```{r}
-#| label: table-ttest1
+#| tbl-cap: "One-Sided T-Test Results 2025"
+#| label: tbl-ttest1
 
 #### Chunk3.2 - Is Home-Field Advantage Real?
 
@@ -398,9 +399,10 @@ test_info %>% kable(
     position = "center"
   )
 ```
-As you can see from the @table-ttest1, the p-value is just barely above the alpha of 0.05 at 0.054. Therefore, we can not reject the null and do not have statistically significant evidence of home-field advantage for the Premier League 2025 season. Out of curiosity, let's check a bigger sample from 2022-2025 data (FBref, 2025c). We will run another one-sided t-test with alpha=0.05 and the null hypothesis is that there are no points gained at home in the 2022-2025 Premier League seasons.
+As you can see from the @tbl-ttest1, the p-value is just barely above the alpha of 0.05 at 0.054. Therefore, we can not reject the null and do not have statistically significant evidence of home-field advantage for the Premier League 2025 season. Out of curiosity, let's check a bigger sample from 2022-2025 data (FBref, 2025c). We will run another one-sided t-test with alpha=0.05 and the null hypothesis is that there are no points gained at home in the 2022-2025 Premier League seasons.
 ```{r}
-#| label: table-ttest2
+#| tbl-cap: "One-Sided T-Test Results 2022-2025"
+#| label: tbl-ttest2
 
 #### Chunk3.4 - Is Home-Field Advantage Real?
 
@@ -467,7 +469,7 @@ test_info %>% kable(
   )
 
 ```
-From @table-ttest2, we can see that the p-value is absolutely below the alpha of 0.05 and we can safely reject the null hypothesis in favor of the alternative which is that there are positive points gained at home per match in the 2022-2025 Premier League season, and therefore home-field advantage existed during this time period.
+From @tbl-ttest2, we can see that the p-value is absolutely below the alpha of 0.05 and we can safely reject the null hypothesis in favor of the alternative which is that there are positive points gained at home per match in the 2022-2025 Premier League season, and therefore home-field advantage existed during this time period.
 
 
 # Which Teams Have the Best and Worst Shot Conversion Rates?
@@ -477,6 +479,7 @@ In this analysis, we took a look at which teams have the best shot conversion ra
 To do this, we used our scraped data (FBref, 2025a) and called it where we focused on the shooting statistics. We then cleaned the data and added the shot conversion rate formula to the function. The formula is easy. It is the amount of goals scored divided by the amount of shots taken. Then, you divide that number by 100 to find the percentage. Then we plotted this data using a horizontal bar chart, where the teams are on the left and the percent is on the bottom. We can easily observe the data and answer our question.
 
 ```{r}
+#| fig-cap: "Premier League Teams Shot Conversion Rate (2024-25)"
 #| label: fig-shotConv
 
 #### Chunk4 - Which Teams Have the Best and Worst Shot Conversion Rates?
@@ -537,11 +540,11 @@ ggplot(
   geom_col(fill = "#69b3a2") +
   coord_flip() +
   labs(
-    title = "Premier League Teams Shot Conversion Rate (2024-25)",
     x = "Team",
     y = "Shot Conversion Rate (%)"
   ) +
   theme_minimal()
+
 ```
 
 From this @fig-shotConv, we can discover that Brentford has the highest shot conversion rate with 15 percent. We can also observe that Southampton has the worst shot conversion rate with a rate about 6.5 percent. This data does not necessarily tell us which teams are the worst and best teams but rather which teams tend me to the most consistent when having an opportunity to score. As we are soccer fans ourselves, we recognize each team's skill level and we can confidently say that Brentford is not the team we expected to see at the top. However, we predicted Southampton to be on the bottom. 
@@ -551,7 +554,8 @@ From this @fig-shotConv, we can discover that Brentford has the highest shot con
 In world football (or soccer as we call it), there are five leagues known as the "Big 5" leagues that are considered to be superior to the rest of the leagues in the world. These five leagues are the Bundesliga in Germany, La Liga in Spain, Ligue 1 in France, Serie A in Italy, and the Premier League in England. For this part of the analysis, we are going to take a look at how the Premier League compares to these leagues financially. The data we will be using to measure the value of teams and leagues is the teams estimated valuation via Transfermarkt.  Out of curiosity, let's first take a look at the teams that have the highest and lowest valuations in the data (Transfermarkt, 2025).
 
 ```{r}
-#| label: table-topten
+#| tbl-cap: "Top Ten Team Valuations (Big 5 Leagues)"
+#| label: tbl-topten
 
 #### Chunk5 - How is the Premier League Different from the Other "Big 5" Leagues Financially?
 
@@ -602,7 +606,6 @@ big_5_valuations_wrangled <- big_5_valuations %>%
     "League",
     "valuation"
   )
-  
 
 ### Visualize difference in team valuations across big 5 leagues
 
@@ -629,11 +632,13 @@ top_ten %>% #creating table
     bootstrap_options = c("striped", "condensed"),
     font_size = 16
   )
+
 ```
-As you can see from @table-topten , the top 10 is dominated by the "Big 6" Premier League clubs: Manchester City, Arsenal, Liverpool, Chelsea, Tottenham, and Manchester United. The rest of the top 10 is rounded out by the dominant clubs of La Liga, Ligue 1, and the Bundesliga. Real Madrid, Barcelona, PSG, and Bayern Munich are expectedly in this list as they are hugely successful clubs in some of the biggest cities in the world. It is important to note that there are no Italian clubs (Serie A) in this list which is a bit surprising. While this gives an idea that the Premier League may have more valuable teams in general, it is possible that the Premier League is top heavy. It is also possible that the other leagues are top heavy and their representation in the top 10 are outliers in their respective leagues. Let's check the bottom ten teams to see if we can learn anything else.
+As you can see from @tbl-topten , the top 10 is dominated by the "Big 6" Premier League clubs: Manchester City, Arsenal, Liverpool, Chelsea, Tottenham, and Manchester United. The rest of the top 10 is rounded out by the dominant clubs of La Liga, Ligue 1, and the Bundesliga. Real Madrid, Barcelona, PSG, and Bayern Munich are expectedly in this list as they are hugely successful clubs in some of the biggest cities in the world. It is important to note that there are no Italian clubs (Serie A) in this list which is a bit surprising. While this gives an idea that the Premier League may have more valuable teams in general, it is possible that the Premier League is top heavy. It is also possible that the other leagues are top heavy and their representation in the top 10 are outliers in their respective leagues. Let's check the bottom ten teams to see if we can learn anything else.
 
 ```{r}
-#| label: table-botten
+#| tbl-cap: "Bottom Ten Team Valuations (Big 5 Leagues)"
+#| label: tbl-botten
 
 #### Chunk5.1 - How is the Premier League Different from the Other "Big 5" Leagues Financially?
 
@@ -658,9 +663,11 @@ bottom_ten %>% #creating table
     bootstrap_options = c("striped", "condensed"),
     font_size = 16
   )
+
 ```
-The first most notable observation from @table-botten is just how less valuable these teams are as compared to the top ten. At $46 million, CD Leganés is about just 3% of the total valuation of Manchester City. This shows just how financially unbalanced the sport of soccer is in Europe where there is no salary cap like most American sports. These teams at the bottom have virtually no chance of ever competing with the top teams. Again, there is an absence of Serie A teams from this list which is quite interesting. Serie A has no teams in the bottom ten or top ten which means that Serie A must have more financial balance between the teams within the league. The Premier League has no representation here which shows that maybe the Premier League really is just that much more valuable. Ligue 1 and the Bundesliga are most represented here which show that it is possible that Bayern Munich and PSG may have been outliers being so highly valued. Let's take a look at how the distributions as a whole compare across the leagues with a box plot.
+The first most notable observation from @tbl-botten is just how less valuable these teams are as compared to the top ten. At $46 million, CD Leganés is about just 3% of the total valuation of Manchester City. This shows just how financially unbalanced the sport of soccer is in Europe where there is no salary cap like most American sports. These teams at the bottom have virtually no chance of ever competing with the top teams. Again, there is an absence of Serie A teams from this list which is quite interesting. Serie A has no teams in the bottom ten or top ten which means that Serie A must have more financial balance between the teams within the league. The Premier League has no representation here which shows that maybe the Premier League really is just that much more valuable. Ligue 1 and the Bundesliga are most represented here which show that it is possible that Bayern Munich and PSG may have been outliers being so highly valued. Let's take a look at how the distributions as a whole compare across the leagues with a box plot.
 ```{r}
+#| fig-cap: "Distribution of Team Valuations by Big 5 League"
 #| label: fig-boxplot
 
 #### Chunk5.2 - How is the Premier League Different from the Other "Big 5" Leagues Financially?
@@ -694,8 +701,6 @@ ggplot(
     breaks = seq(0, 1500, by = 250)
   ) +
   theme_bw()
-
-
 
 ```
 As you can see in @fig-boxplot, the Premier League is indeed much more valuable compared to the other four "Big 5" leagues. In fact, the minimum valued Premier League team would be above the average value in any other of the leagues. In terms of outliers, it is interesting that Serie A does in fact of an positive outlier, but that it did not crack the top ten most valuable teams. It is also interesting that each league has at least one outlier that shows that each of the five leagues have a dominant teams, with La Liga being different with two dominant teams. While it might sound like a bit of a leap to say that just because a team is more valuable that they are a dominant team, being a successful team is the main way to accrue value. While branding and financial assets like a stadium are important, at the end of the day having greater value than others in your league come from being more successful than other teams. In conclusion, we can see that the Premier League is the most valuable of the "Big 5" leagues.
