@@ -1,23 +1,34 @@
 # Project Title
 
-Write a 1-2 sentences that quickly and clearly convey what your repo is for.
+This repository contains the code, datasets, and visualizations for our project, "Premier League Data Analysis." This projects explores statistics such as posssession, shot conversion rate, and home-field advantage. We will mainly look at the Premier League but also grab data from the other top European leagues.
 
 ## Overview
 
-Expand on those introductory sentences with a brief but informative description of your project's purpose and goals. This section should help visitors decide whether they should dig deeper into your repo/project.
+In this project we will answer four research questions:
 
-### Interesting Insight
+  1. Is home-field advantage real overall? For certain teams?
 
-This is optional but highly recommended. You'll include one interesting insight from your project as part of the README. This insight is most effective when you include a visual. Keep in mind that this visual must be included as an image file (e.g., JPG, PNG, etc.). You can export plots created with `{ggplot2}` by using the function `ggsave`.
+  2. What are the financial differences across the big 5 leagues? 
+
+  3. Does having a higher possession translate to wins?
+
+  4. Which teams have the best or worst shot conversion rate?
+
+This analysis will provide a deeper meaning of several statistics in the sport of soccer. We will take a closer look on how much each piece of data matter to the teams.
+
 
 ## Repo Structure
 
-Use this section to explain the structure of your repo. This should help visitors quickly figure out where they should look to find certain elements. Further, you can use this space to highlight and briefly explain important/key files in the repo.
+The main branch consists of everything you need. The files that end in .R contain the code that answer our four research questions. The qmd is where our final report is being coded. The other branches are used for specific contributors to the project. The one with dev-alven will be alven's work and updates while dev-ben will be ben's.
 
 ## Data Sources and Acknowledgements
 
-Be sure to list where you got any data used within the project. Be sure to acknowledge any one whose work or elements you're drawing upon.
+Primary Dataset: Football Reference - https://fbref.com/en/
 
-## Authors
+Secondary Dataset: Transfer Market - https://www.transfermarkt.com/
 
-Give information about who are the authors of the project and how people can get in touch if they have questions.
+## Authors and Contacts
+
+Benjamin Rishel - bdr5318@psu.edu
+
+Alven Huang - afh5922@psu.edu
