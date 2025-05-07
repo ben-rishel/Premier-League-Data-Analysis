@@ -46,9 +46,9 @@ We present the guidelines as a checklist in this file. This means that your team
   - [x] Supplementary data sources may come from anywhere.
 - [x] Read in your data and perform any necessary data tidying, wrangling, and cleaning.
 - [x] Conduct Exploratory Data Analysis.
-- [ ] Prepare a reproducible report.
+- [x] Prepare a reproducible report.
   - [x] Use a QMD file; the output type is PDF.
-  - [ ] The report should be well organized with section headings.
+  - [x] The report should be well organized with section headings.
   - [x] Code should __only__ be found in a Code Appendix at the end for a PDF, not in the body of your report.
     - __TIP!__ The following code chunk can be added to a QMD file and will automatically build a section of code.
 ````
@@ -61,8 +61,8 @@ We present the guidelines as a checklist in this file. This means that your team
   - [x] Create multiple data visualizations (tables and figures) that assist both the team and readers in understanding the data.
     - [x] Data visualizations should show a variety of your skills and geometries.
     - [ ] __Optional__: If your explorations and data make sense to do so, try creating a map.
-    - [ ] Data visualizations should be appropriately sized--not too small and not too big.
-    - [ ] Figures and Tables should have appropriate captions and appropriately cross-referenced in the body of your report.
+    - [x] Data visualizations should be appropriately sized--not too small and not too big.
+    - [x] Figures and Tables should have appropriate captions and appropriately cross-referenced in the body of your report.
     - [x] Your team must produce at least one table that is *not* a display of raw data or a listing of data cases or columns.
     - [x] Your team must produce at least one plot/graph.
     - [x] There should be narrative text helping readers to better understand what each visualization helps them to learn about the data and context.
