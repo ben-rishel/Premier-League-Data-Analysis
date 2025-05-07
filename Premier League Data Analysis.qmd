@@ -93,19 +93,22 @@ Ethics - We were fair and focused on the all the principles. We remained unbiase
 
 For this research question, we want to visualize the average possession percentage for all twenty Premier League teams in the 2024-25 season and compare it to how many wins each team has. In soccer, possession is essentially how long a team controls the ball for the entire game. So, the max possession percentage is 100, which is quite impossible. This will answer our question on if having higher possession means more wins. 
 
-We did this by first installing and calling the required packages. Then we took the scraped data and focus on the possession stat type. We then created a new function to obtain all the teams and their wins this season. We cleaned the data to focus on only wins, possession, and squads. Then, we combined the data and plotted it. On the plot, every team is a black dot. We figured that since this analysis is more focused on the location of the points, we do not need to identify each team with a specific color. We added a trend line to see who is above and below, which will also help us answer our question. We used a scatter plot to see each team's win total by their average possession percentage.
+We did this by first installing and calling the required packages. Then we took the scraped data and focus on the possession stat type. We then created a new function to obtain all the teams and their wins this season. We cleaned the data (FBref, 2025a) to focus on only wins, possession, and squads. Then, we combined the data and plotted it. On the plot, every team is a black dot. We figured that since this analysis is more focused on the location of the points, we do not need to identify each team with a specific color. We added a trend line to see who is above and below, which will also help us answer our question. We used a scatter plot to see each team's win total by their average possession percentage.
 
 ```{r}
 #### Chunk2 - Does Having a Higher Possession Percentage Translate to Wins?
 
-# GOAL: Use scraped data and clean data to create a data visualization that 
-# displays and answers our research questions, "Does having a higher average 
-# possessionpercentage translate to wins?"
+### Plan: Goal, Needs, Steps
 
-# NEEDS: Verbs --> filter, select, inner_join, mutate
-# NEEDS: Nouns --> worldFootballR package, all necessary libraries, team stats
+## Goal: Use scraped data and clean data to create a data visualization that 
+# displays and answers our research questions, 
+# "Does having a higher average possessionpercentage translate to wins?"
 
-# STEPS:
+## Needs:
+# Verbs: filter, select, inner_join, mutate
+# Nouns: worldFootballR package, all necessary libraries, team stats
+
+## Steps:
 # 1. Install the packages and call them
 # 2. Call needed libraries to scrape data
 # 3. Call all functions from scraping data
@@ -121,14 +124,14 @@ We did this by first installing and calling the required packages. Then we took 
 # 11. Create visualization for the conjoined data.
 
 
-# Calls all needed libraries
+### Calls all needed libraries
 library(worldfootballR)
 library(dplyr)
 library(tidyr)
 library(tidyverse)
 library(ggplot2)
 
-# Focuses on possession for all the teams in English Mens' First Tier
+### Focuses on possession for all the teams in English Mens' First Tier
 pl_possession <- fb_season_team_stats(
   country = "ENG", 
   gender = "M", 
@@ -137,7 +140,7 @@ pl_possession <- fb_season_team_stats(
   stat_type = "possession"
 )
 
-# Focuses on the teams on the table in most recent year
+### Focuses on the teams on the table in most recent year
 pl_table <- fb_season_team_stats(
   country = "ENG", 
   gender = "M", 
@@ -146,25 +149,25 @@ pl_table <- fb_season_team_stats(
   stat_type = "league_table"
 )
 
-# Cleans the possession data
+### Cleans the possession data
 pl_possession_clean <- pl_possession %>%
   filter(!str_starts(Squad, "vs ")) %>% # Gets rid of average opposing possession
   select(Squad, Poss) %>% # Focuses on team and the possession percentage
   mutate(Poss = as.numeric(str_remove(Poss, "%"))) 
 
 
-# Cleans the league table data
+### Cleans the league table data
 pl_table_clean <- pl_table %>%
   filter(!str_starts(Squad, "vs ")) %>% # Filters out average opposing once again
   select(Squad, W) # Focuses on the team and the wins
 
 
-# Combines the two clean datas
+### Combines the two clean datas
 pl_poss_wins <- pl_possession_clean %>%
   inner_join(pl_table_clean, by = "Squad")
 
 
-# Creates scatter plot for the combined data
+### Creates scatter plot for the combined data
 ggplot(
   data = pl_poss_wins,
   mapping = aes(
@@ -189,7 +192,7 @@ As we can see in the figure above, the trend line goes up and to the right which
 
 # Is Home-Field Advantage Real?
 
-Next, we will analyze whether or not home-field advantage is real in this Premier League season. Home-field advantage has long been a part of sports discourse. The theory is that teams perform better when they play in their home stadium/arena for a multitude of factors. These factors include the support of their fans, the lack of travel necessary, and the comfort of being at home. To determine whether this is real or not in the Premier League, we will first analyze a stat we created called "Points Gained at Home Per Match". The point system in soccer is used to track how well teams have performed in a season and to organize the league table. If you have the most points at the end of the season you win the league. If you win a game, you get three points. If you tie, you get one point. And if you lose, you get zero points. "Points Gained at Home Per Match" is the difference between average points at home and average points at away matches. For example, if a team has a value 0.5 "Points Gained at Home Per Match", that means that they average 0.5 more points in home games as compared to away games. Let's take a look at a density chart of all 20 Premier League teams.
+Next, we will analyze whether or not home-field advantage is real in this Premier League season. Home-field advantage has long been a part of sports discourse. The theory is that teams perform better when they play in their home stadium/arena for a multitude of factors. These factors include the support of their fans, the lack of travel necessary, and the comfort of being at home. To determine whether this is real or not in the Premier League, we will first analyze a stat we created called "Points Gained at Home Per Match". The point system in soccer is used to track how well teams have performed in a season and to organize the league table. If you have the most points at the end of the season you win the league. If you win a game, you get three points. If you tie, you get one point. And if you lose, you get zero points. "Points Gained at Home Per Match" is the difference between average points at home and average points at away matches. For example, if a team has a value 0.5 "Points Gained at Home Per Match", that means that they average 0.5 more points in home games as compared to away games. Let's take a look at a density chart of all 20 Premier League teams. For this section we will first use team stats data for the 2024-2025 season (FBref, 2025a) and then individual match data from the 2024-2025 season for a significance test (FBref, 2025b).
 
 ```{r}
 #### Chunk3 - Is Home-Field Advantage Real?
@@ -202,12 +205,12 @@ Next, we will analyze whether or not home-field advantage is real in this Premie
 # Nouns: Data, worldfootballR package, dplyr, tidyr, ggplot2, knitr
 # Verbs: worldfootballR functions, data wrangling verbs, ggplot functions
 
-## Steps
-# Import Packages
-# Load in Data
-# Wrangle data to just contain home/away stats
-# Visualize the difference in home/away stats for all teams
-# Run a t-test to see if the difference is statistically significant
+## Steps:
+# 1. Import Packages
+# 2. Load in Data
+# 3. Wrangle data to just contain home/away stats
+# 4. Visualize the difference in home/away stats for all teams
+# 5. Run a t-test to see if the difference is statistically significant
 
 ### Import Packages
 library(worldfootballR)
@@ -375,7 +378,7 @@ test_info %>% kable(
     position = "center"
   )
 ```
-As you can see from the <table>, the p-value is just barely above the alpha of 0.05 at 0.054. Therefore, we can not reject the null and do not have statistically significant evidence of home-field advantage for the Premier League 2025 season. Out of curiosity, let's check a bigger sample from 2022-2025. We will run another one-sided t-test with alpha=0.05 and the null hypothesis is that there are no points gained at home in the 2022-2025 Premier League seasons.
+As you can see from the <table>, the p-value is just barely above the alpha of 0.05 at 0.054. Therefore, we can not reject the null and do not have statistically significant evidence of home-field advantage for the Premier League 2025 season. Out of curiosity, let's check a bigger sample from 2022-2025 data (FBref, 2025c). We will run another one-sided t-test with alpha=0.05 and the null hypothesis is that there are no points gained at home in the 2022-2025 Premier League seasons.
 ```{r}
 #### Chunk3.4 - Is Home-Field Advantage Real?
 
@@ -442,26 +445,27 @@ test_info %>% kable(
   )
 
 ```
-From <table>, we can see that the p-value is absolutely below the alpha of 0.05 and we can safely reject the null hypothesis in favor of the alternative which is that there are positive points gained at home per match in the 2022-2025 Premier League season, and therefore homefield advantage existed during this time period.
+From <table>, we can see that the p-value is absolutely below the alpha of 0.05 and we can safely reject the null hypothesis in favor of the alternative which is that there are positive points gained at home per match in the 2022-2025 Premier League season, and therefore home-field advantage existed during this time period.
 
 
 # Which Teams Have the Best and Worst Shot Conversion Rates?
 
-In this analysis, we took a look at which teams have the best shot conversion rate and which teams have the worst. Shot conversion rate is the rate at which a player scores when they shoot. Everytime they shoot, the rate changes based on whether it goes in or not. We believe this is a great analytic to look at to see which teams are attack heavy and which teams are most consistent on the attack.
+In this analysis, we took a look at which teams have the best shot conversion rate and which teams have the worst. Shot conversion rate is the rate at which a player scores when they shoot. Every time they shoot, the rate changes based on whether it goes in or not. We believe this is a great analytic to look at to see which teams are attack heavy and which teams are most consistent on the attack.
 
-To do this, we used our scraped data and called it where we focused on the shooting statistics. We then cleaned the data and added the shot conversion rate formula to the function. The formula is easy. It is the amount of goals scored divided by the amount of shots taken. Then, you divide that number by 100 to find the percentage. Then we plotted this data using a horizontal bar chart, where the teams are on the left and the percent is on the bottom. We can easily observe the data and answer our question.
+To do this, we used our scraped data (FBref, 2025a) and called it where we focused on the shooting statistics. We then cleaned the data and added the shot conversion rate formula to the function. The formula is easy. It is the amount of goals scored divided by the amount of shots taken. Then, you divide that number by 100 to find the percentage. Then we plotted this data using a horizontal bar chart, where the teams are on the left and the percent is on the bottom. We can easily observe the data and answer our question.
 
 ```{r}
 #### Chunk4 - Which Teams Have the Best and Worst Shot Conversion Rates?
 
-# GOAL: Use scraped and clean data to find each Premier League teams'
+# Goal: Use scraped and clean data to find each Premier League teams'
 # shot conversion rate in the 2024-25 season. This will help answer our 
 # question of which team has the best shot conversion rate and which has the worst.
 
-# NEEDS: Verbs --> filter, select, mutate, arrange
-# NEEDS: Nouns --> worldFootballR package, all necessary libraries, team stats
+## Needs:
+# Verbs: filter, select, mutate, arrange
+# Nouns: worldFootballR package, all necessary libraries, team stats
 
-# STEPS:
+# Steps:
 # 1. Install the packages and call them
 # 2. Call needed libraries to scrape data
 # 3. Call all functions from scraping data
@@ -473,13 +477,13 @@ To do this, we used our scraped data and called it where we focused on the shoot
 # 9. Create visualization for the conjoined data.
 
 
-# Calls all needed libraries
+### Calls all needed libraries
 library(ggplot2)
 library(worldfootballR)
 library(dplyr)
 
 
-# Focuses on shooting for all the teams in English Mens' First Tier
+### Focuses on shooting for all the teams in English Mens' First Tier
 pl_shooting <- fb_season_team_stats(
   country = "ENG", 
   gender = "M", 
@@ -489,7 +493,7 @@ pl_shooting <- fb_season_team_stats(
 )
 
 
-# Cleans shooting data and uses the shot conversion formula
+### Cleans shooting data and uses the shot conversion formula
 pl_conversion <- pl_shooting %>%
   filter(!str_starts(Squad, "vs ")) %>%
   select(Squad, Goals = Gls_Standard, Shots = Sh_Standard) %>%
@@ -498,7 +502,7 @@ pl_conversion <- pl_shooting %>%
   ) %>%
   arrange(desc(ConversionRate))
 
-# Creates a horizontal bar chart to visualize the shot conversion rate for each team
+### Creates a horizontal bar chart to visualize the shot conversion rate for each team
 ggplot(
   data = pl_conversion,
   mapping = aes(
@@ -520,7 +524,7 @@ From this bar chart, we can discover that Brentford has the highest shot convers
 
 # How is the Premier League Different from the Other "Big 5" Leagues Financially?
 
-In world football (or soccer as we call it), there are five leagues known as the "Big 5" leagues that are considered to be superior to the rest of the leagues in the world. These five leagues are the Bundesliga in Germany, La Liga in Spain, Ligue 1 in France, Serie A in Italy, and the Premier League in England. For this part of the analysis, we are going to take a look at how the Premier League compares to these leagues financially. The data we will be using to measure the value of teams and leagues is the teams estimated valuation via Transfermarkt.  Out of curiosity, let's first take a look at the teams that have the highest and lowest valuations.
+In world football (or soccer as we call it), there are five leagues known as the "Big 5" leagues that are considered to be superior to the rest of the leagues in the world. These five leagues are the Bundesliga in Germany, La Liga in Spain, Ligue 1 in France, Serie A in Italy, and the Premier League in England. For this part of the analysis, we are going to take a look at how the Premier League compares to these leagues financially. The data we will be using to measure the value of teams and leagues is the teams estimated valuation via Transfermarkt.  Out of curiosity, let's first take a look at the teams that have the highest and lowest valuations in the data (Transfermarkt, 2025).
 
 ```{r}
 #### Chunk5 - How is the Premier League Different from the Other "Big 5" Leagues Financially?
@@ -534,10 +538,10 @@ In world football (or soccer as we call it), there are five leagues known as the
 # Verbs: worldfootballR functions, data wrangling verbs, ggplot functions
 
 ## Steps
-# Import Packages
-# Load in Data
-# Wrangle data
-# Visualize difference in team/player valuations across leagues
+# 1. Import Packages
+# 2. Load in Data
+# 3.  data
+# 4. Visualize difference in team/player valuations across leagues
 
 ### Import Packages
 
@@ -689,6 +693,16 @@ Let's quickly recap what we discovered while analyzing each question:
 3. Brentford had the best shot conversion rate and Southampton had the worst.
 
 4. The Premier League is cemented as the most valuable of the "Big 5" leagues by a wide margin.
+
+# References
+
+FBref. (2025a). *Premier League Team Stats: 2024-2025 season*.        Retrieved May 7, 2025, from https://fbref.com/
+
+FBref. (2025b). *Premier League Match Results: 2024-2025 seasons*.        Retrieved May 7, 2025, from https://fbref.com/
+
+FBref. (2025c). *Premier League Match Results: 2022-2025 seasons*.        Retrieved May 7, 2025, from https://fbref.com/
+
+Transfermarkt. (2025). *Squad Valuations: 2025*. Retrieved May 6,       2025, from https://www.transfermarkt.com/
 
 # Code Appendix
 
