@@ -19,7 +19,7 @@ This analysis will provide a deeper meaning of several statistics in the sport o
 
 ## Repo Structure
 
-The main branch consists of everything you need. The files that end in .R contain the code that answer our four research questions. The qmd is where our final report is being coded. The other branches are used for specific contributors to the project. The one with dev-alven will be alven's work and updates while dev-ben will be ben's.
+The main branch consists of everything you need. The files that end in .R contain the code that answer our four research questions. The qmd is where our final report is being coded. The other branches are used for specific contributors to the project. The one with dev-alven will be Alven's work and updates while dev-ben will be Ben's.
 
 ## Data Sources and Acknowledgements
 
