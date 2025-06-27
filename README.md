@@ -1,4 +1,4 @@
-# Project Title
+# Premier League Data Analysis
 
 This repository contains the code, datasets, and visualizations for our project, "Premier League Data Analysis." This projects explores statistics such as posssession, shot conversion rate, and home-field advantage. We will mainly look at the Premier League but also grab data from the other top European leagues.
 
